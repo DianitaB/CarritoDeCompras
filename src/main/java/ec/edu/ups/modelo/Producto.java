@@ -1,5 +1,4 @@
-package ec.edu.ups.poo.model;
-
+package ec.edu.ups.modelo;
 public class Producto {
     private int codigo;
     private String nombre;
@@ -7,13 +6,11 @@ public class Producto {
 
     public Producto() {
     }
-
     public Producto(int codigo, String nombre, double precio) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
     }
-
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
@@ -42,4 +39,5 @@ public class Producto {
     public String toString() {
         return nombre + " - $" + precio;
     }
+
 }

@@ -1,7 +1,7 @@
-package ec.edu.ups.poo.servicio;
+package ec.edu.ups.servicio;
 
-import ec.edu.ups.poo.model.ItemCarrito;
-import ec.edu.ups.poo.model.Producto;
+import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.modelo.Producto;
 
 import java.util.List;
 

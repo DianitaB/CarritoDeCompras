@@ -1,4 +1,4 @@
-package ec.edu.ups.poo.model;
+package ec.edu.ups.modelo;
 
 public class ItemCarrito {
     private Producto producto;

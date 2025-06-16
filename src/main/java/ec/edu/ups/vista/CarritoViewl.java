@@ -1,4 +1,4 @@
-package ec.edu.ups.poo.view;
+package ec.edu.ups.vista;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

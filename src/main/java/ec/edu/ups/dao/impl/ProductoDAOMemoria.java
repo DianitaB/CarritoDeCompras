@@ -1,8 +1,6 @@
-package ec.edu.ups.poo.dao.impl;
-
-import ec.edu.ups.poo.dao.ProductoDAO;
-import ec.edu.ups.poo.model.Producto;
-
+package ec.edu.ups.dao.impl;
+import ec.edu.ups.dao.ProductoDAO;
+import ec.edu.ups.modelo.Producto;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,9 +58,18 @@ public class ProductoDAOMemoria implements ProductoDAO {
             }
         }
     }
-
     @Override
     public List<Producto> listarTodos() {
         return productos;
+    }
+    @Override
+    public boolean modificar(Producto producto) {
+        for (int i = 0; i < productos.size(); i++) {
+            if (productos.get(i).getCodigo() == producto.getCodigo()) {
+                productos.set(i, producto);
+                return true;
+            }
+        }
+        return false;
     }
 }

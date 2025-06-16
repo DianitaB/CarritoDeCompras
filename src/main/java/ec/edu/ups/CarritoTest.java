@@ -1,9 +1,9 @@
-package ec.edu.ups.poo;
+package ec.edu.ups;
 
-import ec.edu.ups.poo.model.ItemCarrito;
-import ec.edu.ups.poo.model.Producto;
-import ec.edu.ups.poo.servicio.CarritoService;
-import ec.edu.ups.poo.servicio.CarritoServiceImpl;
+import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.servicio.CarritoService;
+import ec.edu.ups.servicio.CarritoServiceImpl;
 
 public class CarritoTest {
 
