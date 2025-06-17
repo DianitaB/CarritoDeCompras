@@ -1,10 +1,7 @@
 package ec.edu.ups.vista;
 
-import ec.edu.ups.modelo.Producto;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
 
 public class ProductoModificarView extends JFrame {
 
@@ -12,12 +9,9 @@ public class ProductoModificarView extends JFrame {
     private JTextField txtCodigo;
     private JTextField txtNombre;
     private JTextField txtPrecio;
-    private DefaultTableModel model;
     private JButton btnBuscar;
-    private JTable tblProductos;
     private JButton btnEliminar;
     private JButton btnModificar;
-    private JButton btnListar;
 
     public ProductoModificarView() {
         setContentPane(panelPrincipal);
@@ -26,11 +20,6 @@ public class ProductoModificarView extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-
-        model = new DefaultTableModel();
-        Object[] columnas = {"Codigo", "Nombre", "Precio"};
-        model.setColumnIdentifiers(columnas);
-        tblProductos.setModel(model);
     }
     public JTextField getTxtCodigo() {
         return txtCodigo;
@@ -92,16 +81,5 @@ public class ProductoModificarView extends JFrame {
         txtCodigo.setText("");
         txtNombre.setText("");
         txtPrecio.setText("");
-    }
-    public void cargarDatos(List<Producto> listaProductos) {
-        model.setNumRows(0);
-        for (Producto producto : listaProductos) {
-            Object[] fila = {
-                    producto.getCodigo(),
-                    producto.getNombre(),
-                    producto.getPrecio()
-            };
-            model.addRow(fila);
-        }
     }
 }
