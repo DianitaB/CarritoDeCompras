@@ -5,6 +5,7 @@ import ec.edu.ups.modelo.Carrito;
 import java.util.List;
 
 public interface CarritoDAO {
+
     void crear(Carrito carrito);
 
     Carrito buscarPorCodigo(int codigo);
@@ -13,6 +14,6 @@ public interface CarritoDAO {
 
     void eliminar(int codigo);
 
-    List<Carrito> listar();
+    List<Carrito> listarTodos();
 
 }

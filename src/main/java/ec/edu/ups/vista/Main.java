@@ -16,16 +16,21 @@ public class Main {
                 //instancio vistas
                 ProductoAnadirView productoAnadirView = new ProductoAnadirView();
                 ProductoListaView productoListaView = new ProductoListaView();
+                ProductoModificarView productoModificarView = new ProductoModificarView();
+                ProductoEliminarView productoEliminarView = new ProductoEliminarView();
                 CarritoAnadirView carritoAnadirView = new CarritoAnadirView();
-
                 ProductoController productoController = new ProductoController(productoDAO);
-                productoController.setProductoAnadirView(productoAnadirView);
-                productoController.setProductoListaView(productoListaView);
 
                 // añadir producto
                 productoController.setProductoAnadirView(productoAnadirView);
                 //listar producto
                 productoController.setProductoListaView(productoListaView);
+                // modificar producto
+                productoController.setProductoModificarView(productoModificarView);
+                // eliminar producto
+                productoController.setProductoEliminarView(productoEliminarView);
+                // carrito
+                productoController.setCarritoAnadirView(carritoAnadirView);
 
 
                 principalView.getMenuItemCrearProducto().addActionListener(new ActionListener() {
@@ -47,12 +52,31 @@ public class Main {
                         }
                     }
                 });
+                principalView.getMenuItemActualizarProducto().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (!productoModificarView.isVisible()) {
+                            principalView.getjDesktopPane().add(productoModificarView);
+                            productoModificarView.setVisible(true);
+                        }
+                    }
+
+                });
                 principalView.getMenuItemAñadirCarrito().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(!carritoAnadirView.isVisible()){
                             carritoAnadirView.setVisible(true);
                             principalView.getjDesktopPane().add(carritoAnadirView);
+                        }
+                    }
+                });
+                principalView.getMenuItemEliminarProducto().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (!productoEliminarView.isVisible()) {
+                            productoEliminarView.setVisible(true);
+                            principalView.getjDesktopPane().add(productoEliminarView);
                         }
                     }
                 });

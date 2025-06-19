@@ -1,9 +1,8 @@
 package ec.edu.ups.vista;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-public class ProductoModificarView extends JFrame {
+public class ProductoModificarView extends JInternalFrame {
 
     private JPanel panelPrincipal;
     private JTextField txtCodigo;
@@ -16,10 +15,13 @@ public class ProductoModificarView extends JFrame {
     public ProductoModificarView() {
         setContentPane(panelPrincipal);
         setTitle("Modificar Producto");
-        setSize(700, 700);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+        setSize(500, 500);
+        //setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setClosable(true);
+        setIconifiable(true);
+        setResizable(true);
+        //setVisible(true);
     }
     public JTextField getTxtCodigo() {
         return txtCodigo;
@@ -77,6 +79,9 @@ public class ProductoModificarView extends JFrame {
         this.btnEliminar = btnEliminar;
     }
 
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
     public void limpiarCampos() {
         txtCodigo.setText("");
         txtNombre.setText("");
