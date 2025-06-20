@@ -86,7 +86,7 @@
               </grid>
             </constraints>
             <properties>
-              <foreground color="-1515270"/>
+              <foreground color="-16777216"/>
             </properties>
           </component>
           <component id="e5574" class="javax.swing.JTextField" binding="txtCodigo">
@@ -163,4 +163,3 @@
     </children>
   </grid>
 </form>
-

@@ -23,24 +23,21 @@ public class CarritoAnadirView extends JInternalFrame {
     private DefaultTableModel modelo;
 
     public CarritoAnadirView() {
-        super("Carrito de Compras",true,true,true,true);
+        super("Carrito de Compras", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
-        setClosable(true);
-        setIconifiable(true);
-        setResizable(true);
-        cargarDatos();
 
-        modelo = new DefaultTableModel();
-        Object[] columnas = {"Codigo", "Nombre", "Precio", "Cantidad", "Total"};
+        DefaultTableModel modelo = new DefaultTableModel();
+        Object[] columnas = {"Codigo", "Nombre", "Precio", "Cantidad", "Subtotal"};
         modelo.setColumnIdentifiers(columnas);
-        modelo.setRowCount(0);
         tblProductos.setModel(modelo);
+
+        cargarDatos();
     }
-    private void cargarDatos() {
+    private void cargarDatos(){
         cbxCantidad.removeAllItems();
-        for(int i = 0; i < 20;i++){
+        for(int i = 0; i < 20; i++){
             cbxCantidad.addItem(String.valueOf(i + 1));
         }
     }
@@ -156,17 +153,5 @@ public class CarritoAnadirView extends JInternalFrame {
     }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
-    }
-    public void cargarDatos(List<Producto> listaProductos) {
-        modelo.setNumRows(0);
-
-        for (Producto producto : listaProductos) {
-            Object[] fila = {
-                    producto.getCodigo(),
-                    producto.getNombre(),
-                    producto.getPrecio()
-            };
-            modelo.addRow(fila);
-        }
     }
 }
