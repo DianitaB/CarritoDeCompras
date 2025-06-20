@@ -30,6 +30,8 @@ public class Main {
                 ProductoModificarView productoModificarView = new ProductoModificarView();
                 ProductoEliminarView productoEliminarView = new ProductoEliminarView();
                 CarritoAnadirView carritoAnadirView = new CarritoAnadirView();
+                CarritoListarView carritoListarView = new CarritoListarView();
+                CarritoEliminarView carritoEliminarView = new CarritoEliminarView();
 
                 //instanciamos Controladores
                 ProductoController productoController = new ProductoController(
@@ -52,7 +54,30 @@ public class Main {
                 productoController.setProductoEliminarView(productoEliminarView);
                 // carrito
                 productoController.setCarritoAnadirView(carritoAnadirView);
+                // litar carrito
+                carritoController.setCarritoListarView(carritoListarView);
+                // eliminar carrito
+                carritoController.setCarritoEliminarView(carritoEliminarView);
 
+                principalView.getMenuItemBuscarCarrito().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!carritoListarView.isVisible()){
+                            principalView.getjDesktopPane().add(carritoListarView);
+                            carritoListarView.setVisible(true);
+                        }
+                    }
+                });
+
+                principalView.getMenuItemEliminarCarrito().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!carritoEliminarView.isVisible()){
+                            principalView.getjDesktopPane().add(carritoEliminarView);
+                            carritoEliminarView.setVisible(true);
+                        }
+                    }
+                });
 
                 principalView.getMenuItemCrearProducto().addActionListener(new ActionListener() {
                     @Override

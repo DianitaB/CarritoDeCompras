@@ -6,6 +6,8 @@ import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.vista.CarritoAnadirView;
+import ec.edu.ups.vista.CarritoEliminarView;
+import ec.edu.ups.vista.CarritoListarView;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -17,6 +19,8 @@ public class CarritoController {
     private final CarritoDAO carritoDAO;
     private final ProductoDAO productoDAO;
     private final CarritoAnadirView carritoAnadirView;
+    private CarritoListarView carritoListarView;
+    private CarritoEliminarView carritoEliminarView;
     private Carrito carrito;
 
     public CarritoController(CarritoDAO carritoDAO,
@@ -27,6 +31,18 @@ public class CarritoController {
         this.carritoAnadirView = carritoAnadirView;
         this.carrito = new Carrito();
         configurarEventosEnVistas();
+    }
+
+    public void setCarritoListarView(CarritoListarView carritoListarView) {
+        this.carritoListarView = carritoListarView;
+    }
+
+    public void setCarritoEliminarView(CarritoEliminarView carritoEliminarView) {
+        this.carritoEliminarView = carritoEliminarView;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
     }
 
     private void configurarEventosEnVistas() {
