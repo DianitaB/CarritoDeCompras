@@ -81,7 +81,6 @@ public class ProductoListaView extends JInternalFrame {
 
     public void cargarDatos(List<Producto> listaProductos) {
         modelo.setNumRows(0);
-
         for (Producto producto : listaProductos) {
             Object[] fila = {
                     producto.getCodigo(),
@@ -90,6 +89,5 @@ public class ProductoListaView extends JInternalFrame {
             };
             modelo.addRow(fila);
         }
-
     }
 }

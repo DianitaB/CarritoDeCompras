@@ -1,24 +1,24 @@
 package ec.edu.ups.vista;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class PrincipalView extends JFrame {
+public class MenuPrincipalView extends JFrame {
     private JMenuBar menuBar;
+
     private JMenu menuProducto;
     private JMenu menuCarrito;
+
     private JMenuItem menuItemCrearProducto;
     private JMenuItem menuItemEliminarProducto;
     private JMenuItem menuItemActualizarProducto;
     private JMenuItem menuItemBuscarProducto;
+
     private JMenuItem menuItemAñadirCarrito;
     private JMenuItem menuItemBuscarCarrito;
     private JMenuItem menuItemEliminarCarrito;
     private JDesktopPane jDesktopPane;
 
-    public PrincipalView() {
+    public MenuPrincipalView() {
         jDesktopPane = new JDesktopPane();
         menuBar = new JMenuBar();
         menuProducto = new JMenu("Producto");
@@ -136,5 +136,15 @@ public class PrincipalView extends JFrame {
 
     public void setMenuItemBuscarCarrito(JMenuItem menuItemBuscarCarrito) {
         this.menuItemBuscarCarrito = menuItemBuscarCarrito;
+    }
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void deshabilitarMenusAdministrador() {
+        getMenuItemCrearProducto().setEnabled(false);
+        getMenuItemBuscarProducto().setEnabled(false);
+        getMenuItemActualizarProducto().setEnabled(false);
+        getMenuItemEliminarProducto().setEnabled(false);
     }
 }

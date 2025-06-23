@@ -92,11 +92,12 @@
           </component>
           <component id="db2b2" class="javax.swing.JTextField" binding="txtNombre">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="421" height="34"/>
               </grid>
             </constraints>
             <properties>
+              <editable value="false"/>
               <text value=""/>
             </properties>
           </component>
@@ -125,7 +126,9 @@
                 <preferred-size width="428" height="34"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <editable value="false"/>
+            </properties>
           </component>
         </children>
       </grid>

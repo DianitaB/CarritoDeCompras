@@ -1,5 +1,6 @@
 package ec.edu.ups.vista;
 
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -9,6 +10,7 @@ public class CarritoListarView  extends JInternalFrame{
     private JButton btnListar;
     private JTable tblPCarrito;
     private JPanel panelPrincipal;
+    private JTextField txtTotal;
     DefaultTableModel modelo;
 
     CarritoListarView(){
@@ -66,7 +68,21 @@ public class CarritoListarView  extends JInternalFrame{
         return modelo;
     }
 
+    public JTextField getTxtTotal() {
+        return txtTotal;
+    }
+
+    public void setTxtTotal(JTextField txtTotal) {
+        this.txtTotal = txtTotal;
+    }
+
     public void setModelo(DefaultTableModel modelo) {
         this.modelo = modelo;
+    }
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+    public void cargarCarrito(){
+
     }
 }

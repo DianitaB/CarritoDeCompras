@@ -12,7 +12,7 @@ public class CarritoEliminarView extends JInternalFrame {
     private JPanel panelPrincipal;
 
     CarritoEliminarView() {
-        super("Listado de Carritos", true, true, false, true);
+        super("Eliminar Carrito", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
@@ -68,5 +68,11 @@ public class CarritoEliminarView extends JInternalFrame {
 
     public void setBtnBuscar(JButton btnBuscar) {
         this.btnBuscar = btnBuscar;
+    }
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+    public void limpiarCampos() {
+        txtCodigo.setText("");
     }
 }

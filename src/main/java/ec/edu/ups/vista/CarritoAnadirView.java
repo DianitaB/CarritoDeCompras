@@ -150,6 +150,9 @@ public class CarritoAnadirView extends JInternalFrame {
         txtCodigo.setText("");
         txtNombre.setText("");
         txtPrecio.setText("");
+        txtIva.setText("");
+        txtSubTotal.setText("");
+        txtTotal.setText("");
     }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);

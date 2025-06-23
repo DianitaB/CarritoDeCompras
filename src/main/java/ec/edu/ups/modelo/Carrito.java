@@ -1,9 +1,6 @@
 package ec.edu.ups.modelo;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Carrito {
 
@@ -13,14 +10,14 @@ public class Carrito {
 
     private int codigo;
 
-    private GregorianCalendar fechaCreacion;
+    private Date fechaCreacion;
 
     private List<ItemCarrito> items;
 
     public Carrito() {
         codigo = contador++;
         items = new ArrayList<>();
-        fechaCreacion = new GregorianCalendar();
+        fechaCreacion = new Date();
     }
 
     public int getCodigo() {
@@ -31,11 +28,11 @@ public class Carrito {
         this.codigo = codigo;
     }
 
-    public GregorianCalendar getFechaCreacion() {
+    public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(GregorianCalendar fechaCreacion) {
+    public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -84,11 +81,12 @@ public class Carrito {
 
     @Override
     public String toString() {
-        return "Carrito{" +
-                "IVA=" + IVA +
-                ", codigo=" + codigo +
-                ", fechaCreacion=" + fechaCreacion +
-                ", items=" + items +
-                '}';
+        return String.format("Carrito #%d | Fecha: %s | Items: %d | Subtotal: $%.2f | IVA: $%.2f | Total: $%.2f",
+                codigo,
+                fechaCreacion.toString(),
+                items.size(),
+                calcularSubtotal(),
+                calcularIVA(),
+                calcularTotal());
     }
 }
