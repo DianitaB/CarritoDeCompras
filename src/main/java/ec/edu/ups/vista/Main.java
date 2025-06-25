@@ -10,7 +10,6 @@ import ec.edu.ups.dao.impl.CarritoDAOMemoria;
 import ec.edu.ups.dao.impl.ProductoDAOMemoria;
 import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
 import ec.edu.ups.modelo.Usuario;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -146,7 +145,25 @@ public class Main {
                                     }
                                 }
                             });
+                            principalView.getMenuItemIdiomaEspanol().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    principalView.cambiarIdioma("es", "EC");
+                                }
+                            });
 
+                            principalView.getMenuItemIdiomaIngles().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    principalView.cambiarIdioma("en", "US");
+                                }
+                            });
+                            principalView.getMenuItemIdiomaFrances().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    principalView.cambiarIdioma("fr", "FR");
+                                }
+                            });
                         }
                     }
                 });

@@ -3,6 +3,7 @@ package ec.edu.ups.controlador;
 import ec.edu.ups.dao.UsuarioDAO;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.vista.LoginView;
+import ec.edu.ups.vista.MenuPrincipalView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,10 +39,13 @@ public class UsuarioController {
             loginView.mostrarMensaje("Usuario o contraseña incorrectos.");
         }else{
             loginView.dispose();
+            MenuPrincipalView ventanaPrincipal = new MenuPrincipalView();
+            ventanaPrincipal.mostrarUsuario(usuario.getUsername());
+            ventanaPrincipal.setVisible(true);
         }
     }
-
     public Usuario getUsuarioAutenticado(){
         return usuario;
     }
+
 }
