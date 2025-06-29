@@ -22,7 +22,9 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
     @Override
     public Usuario autenticar(String username, String contrasenia) {
         for (Usuario usuario : usuarios) {
-            if(usuario.getUsername().equals(username) && usuario.getContrasenia().equals(contrasenia)){
+            if (usuario.getUsername() != null && usuario.getContrasenia() != null &&
+                    usuario.getUsername().equals(username) &&
+                    usuario.getContrasenia().equals(contrasenia)) {
                 return usuario;
             }
         }
@@ -77,7 +79,6 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
                 usuariosEncontrados.add(usuario);
             }
         }
-
         return usuariosEncontrados;
     }
 }

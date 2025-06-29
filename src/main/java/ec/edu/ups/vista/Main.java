@@ -27,9 +27,11 @@ public class Main {
                 //Iniciar Sesion
                 UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
                 LoginView loginView = new LoginView();
+                RegistrarseView registrarseView = new RegistrarseView();
                 loginView.setVisible(true);
 
-                UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView);
+
+                UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView, registrarseView);
 
                 loginView.addWindowListener(new WindowAdapter() {
                     @Override
@@ -40,7 +42,6 @@ public class Main {
                             //instanciamos DAO (Singleton)
                             ProductoDAO productoDAO = new ProductoDAOMemoria();
                             CarritoDAO carritoDAO = new CarritoDAOMemoria();
-
                             MenuPrincipalView principalView = new MenuPrincipalView();
 
                             //instancio vistas
@@ -61,7 +62,10 @@ public class Main {
                                     carritoAnadirView,
                                     productoDAO
                             );
-                            CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAnadirView);
+                            CarritoController carritoController = new CarritoController(
+                                    carritoDAO,
+                                    productoDAO,
+                                    carritoAnadirView);
 
                             // añadir producto
                             productoController.setProductoAnadirView(productoAnadirView);
@@ -77,6 +81,9 @@ public class Main {
                             carritoController.setCarritoListarView(carritoListarView);
                             // eliminar carrito
                             carritoController.setCarritoEliminarView(carritoEliminarView);
+                            // usuario
+                            usuarioController.setMenuPrincipalView(principalView);
+
 
                             principalView.getMenuItemBuscarCarrito().addActionListener(new ActionListener() {
                                 @Override
@@ -164,6 +171,13 @@ public class Main {
                                     principalView.cambiarIdioma("fr", "FR");
                                 }
                             });
+                            principalView.getMenuItemCerrarSesion().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    usuarioController.cerrarSesion();
+                                }
+                            });
+
                         }
                     }
                 });

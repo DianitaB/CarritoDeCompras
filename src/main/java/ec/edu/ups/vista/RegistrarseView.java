@@ -7,14 +7,14 @@ public class RegistrarseView extends JFrame {
     private JTextField txtUsuario;
     private JPasswordField txtContrasenia;
     private JPasswordField txtConfirmarContrasenia;
-    private JButton btnRegistrarse;
+    private JButton btnRegistrarse2;
 
 
     public RegistrarseView() {
         setContentPane(panelPrincipal);
         setTitle("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(400, 190);
         setLocationRelativeTo(null);
     }
 
@@ -50,12 +50,12 @@ public class RegistrarseView extends JFrame {
         this.txtConfirmarContrasenia = txtConfirmarContrasenia;
     }
 
-    public JButton getBtnRegistrarse() {
-        return btnRegistrarse;
+    public JButton getBtnRegistrarse2() {
+        return btnRegistrarse2;
     }
 
-    public void setBtnRegistrarse(JButton btnRegistrarse) {
-        this.btnRegistrarse = btnRegistrarse;
+    public void setBtnRegistrarse2(JButton btnRegistrarse2) {
+        this.btnRegistrarse2 = btnRegistrarse2;
     }
     public String getContraseniaComoTexto() {
         return new String(txtContrasenia.getPassword());
@@ -72,4 +72,5 @@ public class RegistrarseView extends JFrame {
         txtContrasenia.setText("");
         txtConfirmarContrasenia.setText("");
     }
+
 }
