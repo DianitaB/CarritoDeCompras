@@ -5,82 +5,66 @@ import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.modelo.Producto;
-import ec.edu.ups.vista.CarritoAnadirView;
-import ec.edu.ups.vista.CarritoEliminarView;
-import ec.edu.ups.vista.CarritoListarView;
+import ec.edu.ups.util.FormateadorUtils;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.vista.carrito.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Locale;
 
 public class CarritoController {
 
     private final CarritoDAO carritoDAO;
     private final ProductoDAO productoDAO;
     private final CarritoAnadirView carritoAnadirView;
-    private CarritoListarView carritoListarView;
-    private CarritoEliminarView carritoEliminarView;
-    private Carrito carrito;
+    private final CarritoListarView carritoListarView;
+    private final CarritoEliminarView carritoEliminarView;
+    private final CarritoDetalleView carritoDetalleView;
+    private final CarritoModificarView carritoModificarView;
+    private final MensajeInternacionalizacionHandler mensajeI;
+    private final Carrito carrito;
+
+
 
     public CarritoController(CarritoDAO carritoDAO,
                              ProductoDAO productoDAO,
-                             CarritoAnadirView carritoAnadirView) {
+                             CarritoAnadirView carritoAnadirView,
+                             CarritoListarView carritoListarView,
+                             CarritoEliminarView carritoEliminarView,
+                             CarritoModificarView carritoModificarView,
+                             CarritoDetalleView carritoDetalleView,
+                             MensajeInternacionalizacionHandler mensajeI) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
         this.carritoAnadirView = carritoAnadirView;
+        this.carritoListarView = carritoListarView;
+        this.carritoEliminarView = carritoEliminarView;
+        this.carritoModificarView = carritoModificarView;
+        this.carritoDetalleView = carritoDetalleView;
+        this.mensajeI = mensajeI;
         this.carrito = new Carrito();
         configurarEventosEnVistas();
-    }
+        configurarEventosEnDetalles();
 
-    public void setCarritoListarView(CarritoListarView carritoListarView) {
-        this.carritoListarView = carritoListarView;
-        configurarEventosEnListar();
     }
-
-    public void setCarritoEliminarView(CarritoEliminarView carritoEliminarView) {
-        this.carritoEliminarView = carritoEliminarView;
-        configurarEventosEnEliminar();
-    }
-
-    public void setCarrito(Carrito carrito) {
-        this.carrito = carrito;
-    }
-
-    private void configurarEventosEnEliminar(){
-        carritoEliminarView.getBtnEliminar().addActionListener(new ActionListener() {
+    private void configurarEventosEnDetalles(){
+        carritoDetalleView.getBtnBuscarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                elimarCarrito();
-            }
-        });
-        carritoEliminarView.getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buscarPorCodigoParaEliminar();
-            }
-        });
-        carritoEliminarView.getBtnVaciar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vaciarCarrio();
-            }
-        });
-    }
 
-    private void configurarEventosEnListar(){
-        carritoListarView.getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buscarPorCodigo();
             }
         });
-        carritoListarView.getBtnListar().addActionListener(new ActionListener() {
+        carritoDetalleView.getBtnAceptarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listarCarrito();
+                carritoDetalleView.dispose();
             }
         });
+
     }
 
     private void configurarEventosEnVistas() {
@@ -90,7 +74,6 @@ public class CarritoController {
                 anadirProducto();
             }
         });
-
         carritoAnadirView.getBtnGuardar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,9 +92,42 @@ public class CarritoController {
                 buscarProducto();
             }
         });
+        carritoEliminarView.getBtnEliminar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                elimarCarrito();
+            }
+        });
+        carritoEliminarView.getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarPorCodigoParaEliminar();
+            }
+        });
+        carritoEliminarView.getBtnVaciar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vaciarCarrio();
+            }
+        });
+        carritoListarView.getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarPorCodigo();
+            }
+        });
+        carritoListarView.getBtnListar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listarCarrito();
+            }
+        });
+
     }
 
+    private void buscarDetalleCarrito(){
 
+    }
     private void elimarCarrito() {
         String codigoTexto = carritoEliminarView.getTxtCodigo().getText();
 
@@ -217,6 +233,7 @@ public class CarritoController {
         cargarProductos();
         mostrarTotales();
     }
+
     private void cargarProductos(){
         List<ItemCarrito> items = carrito.obtenerItems();
         DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
@@ -248,9 +265,12 @@ public class CarritoController {
         }
     }
     private void mostrarTotales(){
-        String subtotal = String.valueOf(carrito.calcularSubtotal());
+        Locale locale = carritoAnadirView.getMensajeI().getLocale();
+        String subtotal = FormateadorUtils.formatearMoneda(carrito.calcularSubtotal(), locale);
         String iva = String.valueOf(carrito.calcularIVA());
         String total = String.valueOf(carrito.calcularTotal());
+
+        System.out.println(FormateadorUtils.formatearFecha(carrito.getFechaCreacion().getTime(), locale));
 
         carritoAnadirView.getTxtSubTotal().setText(subtotal);
         carritoAnadirView.getTxtIva().setText(iva);

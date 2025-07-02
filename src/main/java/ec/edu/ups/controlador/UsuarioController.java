@@ -1,14 +1,23 @@
 package ec.edu.ups.controlador;
 
+import ec.edu.ups.dao.PreguntasDAO;
 import ec.edu.ups.dao.UsuarioDAO;
+import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.vista.LoginView;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.vista.preguntas.CuestionarioRecuView;
+import ec.edu.ups.vista.preguntas.CuestionarioView;
+import ec.edu.ups.vista.usuario.LoginView;
 import ec.edu.ups.vista.MenuPrincipalView;
-import ec.edu.ups.vista.RegistrarseView;
+import ec.edu.ups.vista.usuario.RegistrarseView;
+import ec.edu.ups.vista.usuario.UsuarioEliminarView;
+import ec.edu.ups.vista.usuario.UsuarioListarView;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class UsuarioController {
 
@@ -17,6 +26,11 @@ public class UsuarioController {
     private final LoginView loginView;
     private RegistrarseView registrarseView;
     private MenuPrincipalView menuPrincipalView;
+    private UsuarioEliminarView usuarioEliminarView;
+    private UsuarioListarView usuarioListarView;
+    private MensajeInternacionalizacionHandler mensajeI;
+    private CuestionarioView cuestionarioView;
+    private PreguntasController preguntasController;
 
 
     public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView, RegistrarseView registrarseView) {
@@ -26,6 +40,17 @@ public class UsuarioController {
         this.registrarseView = registrarseView;
         configurarEventosEnVistas();
     }
+    public void setPreguntasDependencias(CuestionarioView cuestionarioView, CuestionarioRecuView cuestionarioRecuView, PreguntasDAO preguntasDAO, MensajeInternacionalizacionHandler mensajeI) {
+        this.cuestionarioView = cuestionarioView;
+        this.preguntasController = new PreguntasController(cuestionarioView, cuestionarioRecuView, preguntasDAO,mensajeI);
+        configurarEventoOlvidoContrasena();
+    }
+
+
+    public void setUsuarioEliminarView(UsuarioEliminarView usuarioEliminarView) {
+        this.usuarioEliminarView = usuarioEliminarView;
+        configurarEventosEliminar();
+    }
     public void setMenuPrincipalView(MenuPrincipalView menuPrincipalView) {
         this.menuPrincipalView = menuPrincipalView;
         configurarEventoCerrarSesion();
@@ -33,6 +58,52 @@ public class UsuarioController {
     public void setRegistrarseView(RegistrarseView registrarseView) {
         this.registrarseView = registrarseView;
         configuracionEventosEnRegistrarse();
+    }
+    public void setUsuarioListarView(UsuarioListarView usuarioListarView) {
+        this.usuarioListarView = usuarioListarView;
+        configurarEventosListarUsuario();
+    }
+    private void configurarEventoOlvidoContrasena() {
+        loginView.getBtnOlvidarContra().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cuestionarioView != null) {
+                    cuestionarioView.setVisible(true);
+                } else {
+                    System.out.println("cuestionarioView es null");
+                }
+            }
+        });
+    }
+
+    private void configurarEventosListarUsuario() {
+        usuarioListarView.getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarUsuarios();
+            }
+        });
+        usuarioListarView.getBtnListar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listarUsuarios();
+            }
+        });
+    }
+
+    private void configurarEventosEliminar() {
+        usuarioEliminarView.getBtnBuscarE().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarUsuario();
+            }
+        });
+        usuarioEliminarView.getBtnEliminar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarUsuario();
+            }
+        });
     }
     private void configurarEventoCerrarSesion(){
         menuPrincipalView.getMenuItemCerrarSesion().addActionListener(new ActionListener() {
@@ -62,12 +133,63 @@ public class UsuarioController {
         loginView.getBtnRegistrarse().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                registrarseView = new RegistrarseView();
+                registrarseView = new RegistrarseView(mensajeI);
                 setRegistrarseView(registrarseView);
                 registrarseView.setVisible(true);
             }
         });
 
+    }
+    private void buscarUsuarios() {
+        String nombre = usuarioListarView.getTxtNombreUsu().getText().trim();
+        DefaultTableModel modelo = usuarioListarView.getModelo();
+        modelo.setRowCount(0);
+
+        if (nombre.isEmpty()) {
+            usuarioListarView.mostrarMensaje("Ingrese un nombre de usuario para buscar.");
+            return;
+        }
+        Usuario usuario = usuarioDAO.buscarPorUsername(nombre);
+        if (usuario != null) {
+            modelo.addRow(new Object[]{usuario.getUsername(), usuario.getRol().name()});
+        } else {
+            usuarioListarView.mostrarMensaje("Usuario no encontrado.");
+        }
+    }
+    private void listarUsuarios() {
+        List<Usuario> lista = usuarioDAO.listarTodos();
+        DefaultTableModel modelo = usuarioListarView.getModelo();
+        modelo.setRowCount(0);
+        for (Usuario u : lista) {
+            modelo.addRow(new Object[]{u.getUsername(), u.getRol().name()});
+        }
+    }
+    public void buscarUsuario(){
+        String usuario = usuarioEliminarView.getTxtUsuario().getText();
+        Usuario usuariofound = usuarioDAO.buscarPorUsername(usuario);
+        if(usuariofound == null){
+            usuarioEliminarView.mostrarMensaje("Usuario no encontrado.");
+        }
+    }
+    public void eliminarUsuario(){
+        String usernameEliminar = usuarioEliminarView.getTxtUsuario().getText();
+        String contraseniaAdmin = usuarioEliminarView.getTxtContraseniaE().getText();
+
+        if (getUsuarioAutenticado() == null || getUsuarioAutenticado().getRol() != Rol.ADMINISTRADOR) {
+            usuarioEliminarView.mostrarMensaje("No tienes permisos para eliminar usuarios.");
+            return;
+        }
+        if (!getUsuarioAutenticado().getContrasenia().equals(contraseniaAdmin)) {
+            usuarioEliminarView.mostrarMensaje("Contraseña incorrecta.");
+            return;
+        }
+        Usuario usuarioAEliminar = usuarioDAO.buscarPorUsername(usernameEliminar);
+        if (usuarioAEliminar.getUsername().equals(getUsuarioAutenticado().getUsername())) {
+            usuarioEliminarView.mostrarMensaje("No puedes eliminar tu propia cuenta.");
+            return;
+        }
+        usuarioDAO.eliminar(usernameEliminar);
+        usuarioEliminarView.mostrarMensaje("Usuario eliminado con éxito.");
     }
     public void cerrarSesion() {
         int opcion = JOptionPane.showConfirmDialog(
@@ -83,7 +205,6 @@ public class UsuarioController {
                 menuPrincipalView = null;
             }
             if (loginView != null) {
-                loginView.limpiarCampos();
                 loginView.setVisible(true);
             }
             this.usuario = null;
@@ -101,6 +222,10 @@ public class UsuarioController {
         }
         if (!contrasenia.equals(confirmarContrasenia)) {
             registrarseView.mostrarMensaje("Las contraseñas no coinciden.");
+            return;
+        }
+        if (usuarioDAO.buscarPorUsername(usuarioT) != null) {
+            registrarseView.mostrarMensaje("Ya existe un usuario con ese nombre.");
             return;
         }
         Usuario nuevoUsuario = new Usuario(usuarioT,contrasenia);
@@ -121,6 +246,7 @@ public class UsuarioController {
             loginView.dispose();
         }
     }
+
     public Usuario getUsuarioAutenticado(){
         return usuario;
     }
