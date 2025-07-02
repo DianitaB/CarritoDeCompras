@@ -70,6 +70,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Buscar"/>
         </properties>
       </component>
@@ -174,6 +175,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Añadir"/>
         </properties>
       </component>
@@ -189,6 +191,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Guardar"/>
         </properties>
       </component>
@@ -198,6 +201,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Limpiar"/>
         </properties>
       </component>

@@ -1,9 +1,11 @@
 package ec.edu.ups.vista.carrito;
 
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 
 public class CarritoModificarView extends JInternalFrame {
     private JTextField txtCodigo;
@@ -29,6 +31,22 @@ public class CarritoModificarView extends JInternalFrame {
         tblView.setModel(modelo);
         this.mensajeI = mensajeI;
         cambiarIdi();
+
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
+
+        URL btModificar = LoginView.class.getClassLoader().getResource("imagenes/modificar.png");
+        if (btModificar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btModificar);
+            btnModificar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
     }
     public void cambiarIdi() {
         mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(),mensajeI.getLocale().getCountry());

@@ -1,9 +1,11 @@
 package ec.edu.ups.vista.carrito;
 
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 
 public class CarritoEliminarView extends JInternalFrame {
     private JTextField txtCodigo;
@@ -30,6 +32,30 @@ public class CarritoEliminarView extends JInternalFrame {
         tblLProductos.setModel(modelo);
         this.mensajeI = mensajeI;
         cambiarIdi();
+
+        URL btEliminar = LoginView.class.getClassLoader().getResource("imagenes/eliminar.png");
+        if (btEliminar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btEliminar);
+            btnEliminar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar");
+        }
+
+        URL btVaciar = LoginView.class.getClassLoader().getResource("imagenes/vaciar.png");
+        if (btVaciar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btVaciar);
+            btnVaciar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar");
+        }
+
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
 
     }
     public void cambiarIdi(){

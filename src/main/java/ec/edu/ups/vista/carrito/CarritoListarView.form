@@ -38,7 +38,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
-          <font/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Buscar"/>
         </properties>
       </component>
@@ -48,7 +48,7 @@
         </constraints>
         <properties>
           <background color="-5336421"/>
-          <font/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Listar"/>
         </properties>
       </component>
