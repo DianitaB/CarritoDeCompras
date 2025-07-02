@@ -1,10 +1,12 @@
 package ec.edu.ups.vista.preguntas;
 
 import ec.edu.ups.controlador.PreguntasController;
+import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
+import java.net.URL;
 
-public class CuestionarioView extends JInternalFrame {
+public class CuestionarioView extends JFrame {
     private JTextField txtUsuarioRecu;
     private JButton btnValidarRecu;
     private JComboBox cbxPreguntas;
@@ -13,9 +15,31 @@ public class CuestionarioView extends JInternalFrame {
     private JLabel lblUsuarioRecu;
     private JLabel lblPreguntasRecu;
     private JLabel lblRespuestaRec;
+    private JPanel panelPrincipal;
     private PreguntasController controlador;
 
     public CuestionarioView (){
+        setContentPane(panelPrincipal);
+        setTitle("Registrarse");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 190);
+        setLocationRelativeTo(null);
+
+        URL btValidar = LoginView.class.getClassLoader().getResource("imagenes/validar.png");
+        if (btValidar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btValidar);
+            btnValidarRecu.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Validar");
+        }
+
+        URL btVerificar = LoginView.class.getClassLoader().getResource("imagenes/verificar.png");
+        if (btVerificar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btVerificar);
+            btnVerificarRecu.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Validar");
+        }
 
     }
     private void btnValidarRecuActionPerformed(java.awt.event.ActionEvent evt) {

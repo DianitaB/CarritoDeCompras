@@ -64,6 +64,7 @@
             </constraints>
             <properties>
               <background color="-5336421"/>
+              <font name="Segoe UI Black" size="14"/>
               <text value="Guardar"/>
             </properties>
           </component>

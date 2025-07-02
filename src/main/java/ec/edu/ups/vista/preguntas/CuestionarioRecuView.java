@@ -1,8 +1,10 @@
 package ec.edu.ups.vista.preguntas;
 
 import ec.edu.ups.controlador.PreguntasController;
+import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
+import java.net.URL;
 
 public class CuestionarioRecuView extends JInternalFrame {
     private JPasswordField pswNueva;
@@ -19,6 +21,13 @@ public class CuestionarioRecuView extends JInternalFrame {
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(400, 400);
+        URL btGuardar = LoginView.class.getClassLoader().getResource("imagenes/contrasenia.png");
+        if (btGuardar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btGuardar);
+            btnGuardarNueva.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Guardar Contraseña");
+        }
     }
 
     private void btnGuardarNuevaActionPerformed(java.awt.event.ActionEvent evt) {
