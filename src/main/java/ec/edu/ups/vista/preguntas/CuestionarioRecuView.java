@@ -30,10 +30,6 @@ public class CuestionarioRecuView extends JInternalFrame {
         }
     }
 
-    private void btnGuardarNuevaActionPerformed(java.awt.event.ActionEvent evt) {
-        String nueva = getPswNueva().getText();
-        String confirmar = getPswConfContra().getText();
-    }
 
     public JPasswordField getPswNueva() {
         return pswNueva;

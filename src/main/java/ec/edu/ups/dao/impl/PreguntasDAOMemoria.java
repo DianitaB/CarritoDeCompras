@@ -11,10 +11,15 @@ public class PreguntasDAOMemoria implements PreguntasDAO {
 
 
     public PreguntasDAOMemoria() {
+        listaPreguntas = new ArrayList<>();
+
         listaPreguntas.add(new Preguntas("valeria123", "¿Color favorito?", "azul"));
         listaPreguntas.add(new Preguntas("juanito99", "¿Nombre de tu mascota?", "firulais"));
         listaPreguntas.add(new Preguntas("ana2025", "¿Comida favorita?", "pizza"));
         listaPreguntas.add(new Preguntas("mario12", "¿Nombre de tu mejor amigo?", "andres"));
+        listaPreguntas.add(new Preguntas("admin", "¿Lugar de nacimiento?", "quito"));
+        listaPreguntas.add(new Preguntas("diana", "¿Nombre de tu escuela primaria?", "comil"));
+        listaPreguntas.add(new Preguntas("user", "¿Deporte favorito?", "futbol"));
     }
 
     @Override

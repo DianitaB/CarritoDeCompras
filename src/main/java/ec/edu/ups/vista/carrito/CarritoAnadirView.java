@@ -45,45 +45,10 @@ public class CarritoAnadirView extends JInternalFrame {
 
         cargarDatos();
         cambiarIdi();
-
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscar2.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
-
-        URL btAnadir = LoginView.class.getClassLoader().getResource("imagenes/anadircarrito.png");
-        if (btAnadir != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btAnadir);
-            btnAñadir.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Añadir");
-        }
-
-        URL btGuardar = LoginView.class.getClassLoader().getResource("imagenes/agregarcarrito.png");
-        if (btGuardar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btGuardar);
-            btnGuardar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Guardar");
-        }
-
-        URL btLimpiar = LoginView.class.getClassLoader().getResource("imagenes/limpiar.png");
-        if (btLimpiar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btLimpiar);
-            btnLimpiar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Limpiar");
-        }
-
-
-
+        iconoIma();
 
     }
     public void cambiarIdi(){
-        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(),mensajeI.getLocale().getCountry());
         setTitle(mensajeI.get("carrito.anadir.titulo"));
         lblCodigo.setText(mensajeI.get("carrito.anadir.codigo"));
         lblCantidad.setText(mensajeI.get("carrito.anadir.cantidad"));
@@ -235,5 +200,37 @@ public class CarritoAnadirView extends JInternalFrame {
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
+    private void iconoIma(){
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar2.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
 
+        URL btAnadir = LoginView.class.getClassLoader().getResource("imagenes/anadircarrito.png");
+        if (btAnadir != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btAnadir);
+            btnAñadir.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Añadir");
+        }
+
+        URL btGuardar = LoginView.class.getClassLoader().getResource("imagenes/agregarcarrito.png");
+        if (btGuardar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btGuardar);
+            btnGuardar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Guardar");
+        }
+
+        URL btLimpiar = LoginView.class.getClassLoader().getResource("imagenes/limpiar.png");
+        if (btLimpiar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btLimpiar);
+            btnLimpiar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Limpiar");
+        }
+    }
 }

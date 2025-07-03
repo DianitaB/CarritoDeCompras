@@ -34,7 +34,7 @@ public class Main {
     @SuppressWarnings("all")
     public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
+        UsuarioDAO usuarioDAO = UsuarioDAOMemoria.getInstancia();
         MensajeInternacionalizacionHandler mensajeI = new MensajeInternacionalizacionHandler("es","EC");
 
 
@@ -50,7 +50,7 @@ public class Main {
 
                 UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView, registrarseView);
                 loginView.setVisible(true);
-                usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, preguntasDAO, mensajeI);
+                usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, preguntasDAO, mensajeI,usuarioController);
 
                 loginView.addWindowListener(new WindowAdapter() {
                     @Override
@@ -115,6 +115,8 @@ public class Main {
                             // usuario
                             usuarioController.setUsuarioListarView(usuarioListarView);
                             usuarioController.setMenuPrincipalView(principalView);
+                            usuarioController.setUsuarioEliminarView(usuarioEliminarView);
+
 
                             principalView.getMenuItemModificarUsuario().addActionListener(new ActionListener() {
                                 @Override

@@ -69,6 +69,7 @@
         <properties>
           <background color="-5336421"/>
           <enabled value="true"/>
+          <font name="Segoe UI Black" size="14"/>
           <text value="Eliminar"/>
         </properties>
       </component>

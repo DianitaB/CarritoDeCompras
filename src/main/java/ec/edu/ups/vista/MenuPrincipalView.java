@@ -1,6 +1,7 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,9 @@ public class MenuPrincipalView extends JFrame {
     public MenuPrincipalView(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
         this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
         initComponents();
+        agregarListeners();
     }
+
     public JMenu getMenuUsuario() {
         return menuUsuario;
     }
@@ -242,8 +245,9 @@ public class MenuPrincipalView extends JFrame {
         this.menuItemBuscarCarrito = menuItemBuscarCarrito;
     }
 
+
     private void initComponents() {
-        jDesktopPane = new JDesktopPane();
+        jDesktopPane = new MiJDesktopPane();
         menuBar = new JMenuBar();
         menuProducto = new JMenu(mensajeInternacionalizacionHandler.get("menu.producto"));
         menuCarrito = new JMenu(mensajeInternacionalizacionHandler.get("menu.carrito"));
@@ -312,6 +316,23 @@ public class MenuPrincipalView extends JFrame {
 
         add(panelSuperior, BorderLayout.NORTH);
     }
+    private void agregarListeners() {
+        menuItemCerrarSesion.addActionListener(e -> {
+            int opcion = JOptionPane.showConfirmDialog(
+                    this,
+                    mensajeInternacionalizacionHandler.get("mensaje.confirmarCerrarSesion"),
+                    mensajeInternacionalizacionHandler.get("titulo.confirmar"),
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                this.dispose();
+                LoginView login = new LoginView(mensajeInternacionalizacionHandler);
+                login.setVisible(true);
+            }
+        });
+    }
+
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
@@ -351,6 +372,6 @@ public class MenuPrincipalView extends JFrame {
         menuItemIdiomaFrances.setText(mensajeInternacionalizacionHandler.get("menu.idioma.fr"));
 
         menuItemCerrarSesion.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
-
     }
+
 }

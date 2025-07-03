@@ -23,35 +23,29 @@ public class LoginView extends JFrame {
     public LoginView(MensajeInternacionalizacionHandler mensajeInternalizacion) {
         this.mensajeInternalizacion = mensajeInternalizacion;
         setTitle("Iniciar Sesión");
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 500);
         setLocationRelativeTo(null);
         add(panelPrincipal);
         cargarIdiomasEnCombo();
-        initComponent();
+        seleccionarIdiomaActual();
+        cbIdiomas.addActionListener(e -> {
+            String idiomaSeleccionado = (String) cbIdiomas.getSelectedItem();
+            switch (idiomaSeleccionado.toLowerCase()) {
+                case "english":
+                    mensajeInternalizacion.setLenguaje("en", "US");
+                    break;
+                case "français":
+                    mensajeInternalizacion.setLenguaje("fr", "FR");
+                    break;
+                default:
+                    mensajeInternalizacion.setLenguaje("es", "EC");
+                    break;
+            }
+            actualizarTextos();
+        });
 
-        URL loginURL = LoginView.class.getClassLoader().getResource("imagenes/login.png");
-        if (loginURL != null) {
-            ImageIcon iconoBtnIniciarSesion = new ImageIcon(loginURL);
-            btnIniciarSesion.setIcon(iconoBtnIniciarSesion);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Login");
-        }
-
-        URL registrarseURL = LoginView.class.getClassLoader().getResource("imagenes/registrarse.png");
-        if (registrarseURL != null) {
-            ImageIcon iconoBtnRegistrarse = new ImageIcon(registrarseURL);
-            btnRegistrarse.setIcon(iconoBtnRegistrarse);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Registrarse");
-        }
-        URL olvidarURL = LoginView.class.getClassLoader().getResource("imagenes/pregunta.png");
-        if (olvidarURL != null) {
-            ImageIcon iconoBtnOlvidar = new ImageIcon(olvidarURL);
-            btnOlvidarContra.setIcon(iconoBtnOlvidar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Pregunta");
-        }
+        actualizarTextos();
+        iconosIma();
     }
 
     public JPanel getPanelPrincipal() {
@@ -118,37 +112,6 @@ public class LoginView extends JFrame {
         this.btnOlvidarContra = btnOlvidarContra;
     }
 
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
-
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-    public JLabel getLblIdioma() {
-        return lblIdioma;
-    }
-
-    public void setLblIdioma(JLabel lblIdioma) {
-        this.lblIdioma = lblIdioma;
-    }
-
-    public JLabel getLblContrasenia() {
-        return lblContrasenia;
-    }
-
-    public void setLblContrasenia(JLabel lblContrasenia) {
-        this.lblContrasenia = lblContrasenia;
-    }
-
-    public MensajeInternacionalizacionHandler getMensajeInternalizacion() {
-        return mensajeInternalizacion;
-    }
-
-    public void setMensajeInternalizacion(MensajeInternacionalizacionHandler mensajeInternalizacion) {
-        this.mensajeInternalizacion = mensajeInternalizacion;
-    }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
@@ -159,6 +122,7 @@ public class LoginView extends JFrame {
         cbIdiomas.addItem("English");
         cbIdiomas.addItem("Français");
     }
+
     public void seleccionarIdiomaActual() {
         Locale actual = mensajeInternalizacion.getLocale();
         if (actual.getLanguage().equals("en")) {
@@ -169,9 +133,9 @@ public class LoginView extends JFrame {
             cbIdiomas.setSelectedIndex(0);
         }
     }
+
     public void actualizarTextos() {
         this.setTitle(mensajeInternalizacion.get("login.titulo.ventana"));
-
         lblUsuario.setText(mensajeInternalizacion.get("login.label.usuario"));
         lblContrasenia.setText(mensajeInternalizacion.get("login.label.contrasenia"));
         lblIdioma.setText(mensajeInternalizacion.get("menu.idioma"));
@@ -180,9 +144,29 @@ public class LoginView extends JFrame {
         btnRegistrarse.setText(mensajeInternalizacion.get("login.boton.registrarse"));
         btnOlvidarContra.setText(mensajeInternalizacion.get("login.boton.recuperar"));
     }
-    public void initComponent() {
-        cargarIdiomasEnCombo();
-        seleccionarIdiomaActual();
-        actualizarTextos();
+
+    public void iconosIma() {
+        URL loginURL = LoginView.class.getClassLoader().getResource("imagenes/login.png");
+        if (loginURL != null) {
+            ImageIcon iconoBtnIniciarSesion = new ImageIcon(loginURL);
+            btnIniciarSesion.setIcon(iconoBtnIniciarSesion);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Login");
+        }
+
+        URL registrarseURL = LoginView.class.getClassLoader().getResource("imagenes/registrarse.png");
+        if (registrarseURL != null) {
+            ImageIcon iconoBtnRegistrarse = new ImageIcon(registrarseURL);
+            btnRegistrarse.setIcon(iconoBtnRegistrarse);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Registrarse");
+        }
+        URL olvidarURL = LoginView.class.getClassLoader().getResource("imagenes/pregunta.png");
+        if (olvidarURL != null) {
+            ImageIcon iconoBtnOlvidar = new ImageIcon(olvidarURL);
+            btnOlvidarContra.setIcon(iconoBtnOlvidar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Pregunta");
+        }
     }
 }

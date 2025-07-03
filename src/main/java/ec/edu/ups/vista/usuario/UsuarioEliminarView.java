@@ -3,6 +3,7 @@ package ec.edu.ups.vista.usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.net.URL;
 
 public class UsuarioEliminarView extends JInternalFrame{
     private JTextField txtUsuario;
@@ -21,6 +22,7 @@ public class UsuarioEliminarView extends JInternalFrame{
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(300, 190);
         cambiarIdi();
+        iconosIma();
     }
 
     public void cambiarIdi  (){
@@ -59,22 +61,6 @@ public class UsuarioEliminarView extends JInternalFrame{
         this.btnEliminar = btnEliminar;
     }
 
-    public JLabel getLblUsuario() {
-        return lblUsuario;
-    }
-
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
-    }
-
-    public JLabel getLblContrasenia() {
-        return lblContrasenia;
-    }
-
-    public void setLblContrasenia(JLabel lblContrasenia) {
-        this.lblContrasenia = lblContrasenia;
-    }
-
     public JPanel getPanelPrincipal() {
         return panelPrincipal;
     }
@@ -94,4 +80,13 @@ public class UsuarioEliminarView extends JInternalFrame{
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
+    public void iconosIma(){
+        URL btEliminarr = LoginView.class.getClassLoader().getResource("imagen/delete.png");
+        if (btEliminarr != null) {
+            ImageIcon iconoEliminarU = new ImageIcon(btEliminarr);
+            btnEliminar.setIcon(iconoEliminarU);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar Usuario");
+        }
+    }
 }

@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioController {
@@ -40,12 +41,12 @@ public class UsuarioController {
         this.registrarseView = registrarseView;
         configurarEventosEnVistas();
     }
-    public void setPreguntasDependencias(CuestionarioView cuestionarioView, CuestionarioRecuView cuestionarioRecuView, PreguntasDAO preguntasDAO, MensajeInternacionalizacionHandler mensajeI) {
+    public void setPreguntasDependencias(CuestionarioView cuestionarioView, CuestionarioRecuView cuestionarioRecuView, PreguntasDAO preguntasDAO, MensajeInternacionalizacionHandler mensajeI,UsuarioController usuarioController) {
         this.cuestionarioView = cuestionarioView;
-        this.preguntasController = new PreguntasController(cuestionarioView, cuestionarioRecuView, preguntasDAO,mensajeI);
+        this.preguntasController = new PreguntasController(cuestionarioView, cuestionarioRecuView, preguntasDAO,mensajeI,usuarioController);
+        cuestionarioView.setControlador(preguntasController);
         configurarEventoOlvidoContrasena();
     }
-
 
     public void setUsuarioEliminarView(UsuarioEliminarView usuarioEliminarView) {
         this.usuarioEliminarView = usuarioEliminarView;
@@ -75,7 +76,6 @@ public class UsuarioController {
             }
         });
     }
-
     private void configurarEventosListarUsuario() {
         usuarioListarView.getBtnBuscar().addActionListener(new ActionListener() {
             @Override
@@ -118,7 +118,6 @@ public class UsuarioController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 crear();
-
             }
         });
     }
@@ -215,37 +214,80 @@ public class UsuarioController {
         String usuarioT = registrarseView.getTxtUsuario().getText();
         String contrasenia = new String(registrarseView.getTxtContrasenia().getPassword());
         String confirmarContrasenia = new String(registrarseView.getTxtConfirmarContrasenia().getPassword());
+        String nombre = registrarseView.getTxtNombresCom().getText();
+        String fechaNac = registrarseView.getTxtFNacimiento().getText();
+        String correo = registrarseView.getTxtCorreo().getText();
+        String telefono = registrarseView.getTxtTelefono().getText();
 
-        if (usuarioT.isEmpty() || contrasenia.isEmpty() || confirmarContrasenia.isEmpty()) {
+        String pregunta1 = (String) registrarseView.getCbxP1().getSelectedItem();
+        String pregunta2 = (String) registrarseView.getCbxP2().getSelectedItem();
+        String pregunta3 = (String) registrarseView.getCbxPre3().getSelectedItem();
+
+        String respuesta1 = registrarseView.getTxtResp1().getText();
+        String respuesta2 = registrarseView.getTxtResp2().getText();
+        String respuesta3 = registrarseView.getTxtResp3().getText();
+
+        // Validaciones
+        if (usuarioT.isEmpty() || contrasenia.isEmpty() || confirmarContrasenia.isEmpty() || nombre.isEmpty()
+                || fechaNac.isEmpty() || correo.isEmpty() || telefono.isEmpty()
+                || respuesta1.isEmpty() || respuesta2.isEmpty() || respuesta3.isEmpty()) {
             registrarseView.mostrarMensaje("Todos los campos son obligatorios.");
             return;
         }
+
         if (!contrasenia.equals(confirmarContrasenia)) {
             registrarseView.mostrarMensaje("Las contraseñas no coinciden.");
             return;
         }
-        if (usuarioDAO.buscarPorUsername(usuarioT) != null) {
-            registrarseView.mostrarMensaje("Ya existe un usuario con ese nombre.");
+
+        if (pregunta1.equals(pregunta2) || pregunta1.equals(pregunta3) || pregunta2.equals(pregunta3)) {
+            registrarseView.mostrarMensaje("Las preguntas deben ser distintas.");
             return;
         }
-        Usuario nuevoUsuario = new Usuario(usuarioT,contrasenia);
+
+        if (usuarioDAO.buscarPorUsername(usuarioT) != null) {
+            registrarseView.mostrarMensaje("Ya existe un usuario con ese nombre.");
+            registrarseView.limpiarCampos();
+            return;
+        }
+
+        List<String> preguntas = new ArrayList<>();
+        preguntas.add(pregunta1);
+        preguntas.add(pregunta2);
+        preguntas.add(pregunta3);
+
+        List<String> respuestas = new ArrayList<>();
+        respuestas.add(respuesta1);
+        respuestas.add(respuesta2);
+        respuestas.add(respuesta3);
+
+        Usuario nuevoUsuario = new Usuario(usuarioT, contrasenia, nombre, fechaNac, correo, telefono, preguntas, respuestas);
         usuarioDAO.crear(nuevoUsuario);
         registrarseView.mostrarMensaje("Usuario registrado con éxito.");
         registrarseView.dispose();
     }
 
+
     private void autenticar(){
         String username = loginView.getTxtUsername().getText();
-        String contrasenia = new String( loginView.getTxtContrasenia().getPassword());
+        String contrasenia = new String(loginView.getTxtContrasenia().getPassword());
 
         usuario = usuarioDAO.autenticar(username, contrasenia);
         if(usuario == null){
             loginView.mostrarMensaje("Usuario o contraseña incorrectos.");
         }else{
-            loginView.mostrarMensaje("Bienvenido al sistema: " + loginView.getTxtUsername().getText());
+            loginView.mostrarMensaje("Bienvenido al sistema: " + username);
             loginView.dispose();
         }
     }
+    public void mostrarVentanaInterna(JInternalFrame frame) {
+        if (menuPrincipalView != null) {
+            menuPrincipalView.getjDesktopPane().add(frame);
+            frame.setVisible(true);
+            frame.toFront();
+        }
+    }
+
 
     public Usuario getUsuarioAutenticado(){
         return usuario;

@@ -13,22 +13,28 @@ public class MiJDesktopPane extends JDesktopPane {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // dibuja la cara
-        g.setColor(Color.YELLOW);
-        g.fillOval(10, 10, 200, 200);
+        g.setColor(new Color(204, 198, 255));
+        g.fillRect(0, 0, getWidth(), getHeight());
 
-        // dibuja los ojos
         g.setColor(Color.BLACK);
-        g.fillOval(55, 65, 30, 30);
-        g.fillOval(135, 65, 30, 30);
 
-        // dibuja la boca
-        g.fillOval(50, 110, 120, 60);
+        // Dibuja la aleta izquierda
+        g.drawLine(150, 200, 50, 100);
+        g.drawLine(50, 100, 150, 50);
 
-        // convierte la boca en una sonrisa
-        g.setColor(Color.YELLOW);
-        g.fillRect(50, 110, 120, 30);
-        g.fillOval(50, 120, 120, 40);
+        // Dibuja la aleta derecha
+        g.drawLine(150, 200, 250, 100);
+        g.drawLine(250, 100, 150, 50);
 
+        // Dibuja la curva inferior de la aleta derecha
+        g.drawArc(120, 150, 100, 100, 0, -180); // Aproximación con un arco
+
+        // Dibuja la línea que conecta la parte inferior de la "V" con la aleta curva
+        g.drawLine(150, 200, 170, 220); // Ajusta estas coordenadas para la conexión
+
+        // Dibuja la forma de la aleta curva
+        // Esto es una simplificación, para la forma exacta se necesitarían más líneas o Path2D
+        g.drawLine(170, 220, 140, 250);
+        g.drawLine(140, 250, 100, 230);
     }
 }

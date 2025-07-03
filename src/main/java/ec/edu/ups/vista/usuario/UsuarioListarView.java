@@ -4,6 +4,7 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
 
 public class UsuarioListarView extends JInternalFrame{
     private JTextField txtNombreUsu;
@@ -25,6 +26,21 @@ public class UsuarioListarView extends JInternalFrame{
         modelo = new DefaultTableModel(new Object[]{"Usuario", "Rol"}, 0);
         tblListarUsuarios.setModel(modelo);
 
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagen/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconoLis = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconoLis);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar Usuario");
+        }
+
+        URL btListar = LoginView.class.getClassLoader().getResource("imagen/listar.png");
+        if (btListar != null) {
+            ImageIcon icnoLi = new ImageIcon(btListar);
+            btnListar.setIcon(icnoLi);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Listar Usuario");
+        }
     }
 
     public JTextField getTxtNombreUsu() {

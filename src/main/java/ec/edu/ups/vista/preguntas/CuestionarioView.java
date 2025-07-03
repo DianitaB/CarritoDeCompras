@@ -22,7 +22,7 @@ public class CuestionarioView extends JFrame {
         setContentPane(panelPrincipal);
         setTitle("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 190);
+        setSize(400, 200);
         setLocationRelativeTo(null);
 
         URL btValidar = LoginView.class.getClassLoader().getResource("imagenes/validar.png");
@@ -113,6 +113,9 @@ public class CuestionarioView extends JFrame {
 
     public void setLblUsuarioRecu(JLabel lblUsuarioRecu) {
         this.lblUsuarioRecu = lblUsuarioRecu;
+    }
+    public void setControlador(PreguntasController controlador) {
+        this.controlador = controlador;
     }
 
     public void dispose() {

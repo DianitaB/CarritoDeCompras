@@ -13,17 +13,25 @@ public class PreguntasController {
     private final CuestionarioView cuestionarioView;
     private final CuestionarioRecuView cuestionarioRecuView;
     private final PreguntasDAO preguntasDAO;
+    private final UsuarioController usuarioController;
+
     private MensajeInternacionalizacionHandler mensajeI;
 
     private Preguntas preguntaActual;
 
-    public PreguntasController(CuestionarioView cuestionarioView, CuestionarioRecuView cuestionarioRecuView, PreguntasDAO preguntasDAO,MensajeInternacionalizacionHandler mensajeI) {
+    public PreguntasController(CuestionarioView cuestionarioView,
+                               CuestionarioRecuView cuestionarioRecuView,
+                               PreguntasDAO preguntasDAO,
+                               MensajeInternacionalizacionHandler mensajeI,
+                               UsuarioController usuarioController) {
         this.cuestionarioView = cuestionarioView;
         this.cuestionarioRecuView = cuestionarioRecuView;
         this.preguntasDAO = preguntasDAO;
         this.mensajeI = mensajeI;
+        this.usuarioController = usuarioController;
         configurarEventos();
     }
+
 
     private void configurarEventos() {
         cuestionarioView.getBtnValidarRecu().addActionListener(e -> {
@@ -41,7 +49,7 @@ public class PreguntasController {
             String respuesta = cuestionarioView.getTxtRespuestaRecu().getText();
             if (preguntaActual != null && preguntaActual.getRespuesta().equalsIgnoreCase(respuesta.trim())) {
                 JOptionPane.showMessageDialog(cuestionarioView, "Respuesta correcta. Puede cambiar su contraseña.");
-                cuestionarioRecuView.setVisible(true);
+                usuarioController.mostrarVentanaInterna(cuestionarioRecuView);
             } else {
                 JOptionPane.showMessageDialog(cuestionarioView, "Respuesta incorrecta.");
             }
@@ -75,6 +83,7 @@ public class PreguntasController {
         preguntaActual = preguntasDAO.buscarPorUsername(username);
         return preguntaActual != null;
     }
+
 
     public String obtenerPregunta() {
         return preguntaActual != null ? preguntaActual.getPregunta() : null;
