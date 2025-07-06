@@ -24,7 +24,7 @@ public class CarritoListarView  extends JInternalFrame{
         super("Listado de Carritos", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 500);
+        setSize(500, 800);
         modelo = new DefaultTableModel();
         Object[] columnas = {"Código", "Nombre", "Precio", "Cantidad", "Total"};
         modelo.setColumnIdentifiers(columnas);

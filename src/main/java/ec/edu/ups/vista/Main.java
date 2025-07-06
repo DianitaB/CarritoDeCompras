@@ -236,6 +236,63 @@ public class Main {
                                     usuarioController.buscarUsuario();
                                 }
                             });
+                            principalView.getMenuItemIdiomaEspanol().addActionListener(event -> {
+                                principalView.cambiarIdioma("es", "EC");
+
+                                productoAnadirView.cambiarIdioma();
+                                productoListaView.cambiarIdioma();
+                                productoModificarView.cambiarIdioma();
+                                productoEliminarView.cambiarIdioma();
+
+                                carritoAnadirView.cambiarIdioma();
+                                carritoListarView.cambiarIdioma();
+                                carritoEliminarView.cambiarIdioma();
+                                carritoModificarView.cambiarIdioma();
+                                carritoDetalleView.cambiarIdioma();
+
+                                usuarioListarView.cambiarIdioma();
+                                usuarioEliminarView.cambiarIdioma();
+                                usuarioModificarView.cambiarIdioma();
+                            });
+
+                            principalView.getMenuItemIdiomaIngles().addActionListener(event -> {
+                                principalView.cambiarIdioma("en", "US");
+
+                                productoAnadirView.cambiarIdioma();
+                                productoListaView.cambiarIdioma();
+                                productoModificarView.cambiarIdioma();
+                                productoEliminarView.cambiarIdioma();
+
+                                carritoAnadirView.cambiarIdioma();
+                                carritoListarView.cambiarIdioma();
+                                carritoEliminarView.cambiarIdioma();
+                                carritoModificarView.cambiarIdioma();
+                                carritoDetalleView.cambiarIdioma();
+
+                                usuarioListarView.cambiarIdioma();
+                                usuarioEliminarView.cambiarIdioma();
+                                usuarioModificarView.cambiarIdioma();
+                            });
+
+                            principalView.getMenuItemIdiomaFrances().addActionListener(event -> {
+                                principalView.cambiarIdioma("fr", "FR");
+
+                                productoAnadirView.cambiarIdioma();
+                                productoListaView.cambiarIdioma();
+                                productoModificarView.cambiarIdioma();
+                                productoEliminarView.cambiarIdioma();
+
+                                carritoAnadirView.cambiarIdioma();
+                                carritoListarView.cambiarIdioma();
+                                carritoEliminarView.cambiarIdioma();
+                                carritoModificarView.cambiarIdioma();
+                                carritoDetalleView.cambiarIdioma();
+
+                                usuarioListarView.cambiarIdioma();
+                                usuarioEliminarView.cambiarIdioma();
+                                usuarioModificarView.cambiarIdioma();
+                            });
+
                         }
                     }
                 });
