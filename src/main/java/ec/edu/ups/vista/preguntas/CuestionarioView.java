@@ -1,6 +1,7 @@
 package ec.edu.ups.vista.preguntas;
 
-import ec.edu.ups.controlador.PreguntasController;
+import ec.edu.ups.controlador.RecuperacionController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
@@ -16,31 +17,18 @@ public class CuestionarioView extends JFrame {
     private JLabel lblPreguntasRecu;
     private JLabel lblRespuestaRec;
     private JPanel panelPrincipal;
-    private PreguntasController controlador;
+    private MensajeInternacionalizacionHandler mensajeI;
+    private RecuperacionController controlador;
 
-    public CuestionarioView (){
+    public CuestionarioView (MensajeInternacionalizacionHandler mensajeI) {
         setContentPane(panelPrincipal);
         setTitle("Registrarse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 200);
         setLocationRelativeTo(null);
-
-        URL btValidar = LoginView.class.getClassLoader().getResource("imagenes/validar.png");
-        if (btValidar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btValidar);
-            btnValidarRecu.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Validar");
-        }
-
-        URL btVerificar = LoginView.class.getClassLoader().getResource("imagenes/verificar.png");
-        if (btVerificar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btVerificar);
-            btnVerificarRecu.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Validar");
-        }
-
+        this.mensajeI = mensajeI;
+        iconoIma();
+        cambiarIdioma();
     }
     private void btnValidarRecuActionPerformed(java.awt.event.ActionEvent evt) {
         String usuario = getTxtUsuarioRecu().getText();
@@ -114,10 +102,38 @@ public class CuestionarioView extends JFrame {
     public void setLblUsuarioRecu(JLabel lblUsuarioRecu) {
         this.lblUsuarioRecu = lblUsuarioRecu;
     }
-    public void setControlador(PreguntasController controlador) {
+    public void setControlador(RecuperacionController controlador) {
         this.controlador = controlador;
     }
 
     public void dispose() {
+    }
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("cuestionario.titulo.ventana"));
+
+        lblUsuarioRecu.setText(mensajeI.get("cuestionario.label.usuario"));
+        lblPreguntasRecu.setText(mensajeI.get("cuestionario.label.preguntas"));
+        lblRespuestaRec.setText(mensajeI.get("cuestionario.label.respuesta"));
+
+        btnValidarRecu.setText(mensajeI.get("cuestionario.boton.validar"));
+        btnVerificarRecu.setText(mensajeI.get("cuestionario.boton.verificar"));
+    }
+
+    private void iconoIma() {
+        URL btValidar = LoginView.class.getClassLoader().getResource("imagenes/validar.png");
+        if (btValidar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btValidar);
+            btnValidarRecu.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Validar");
+        }
+
+        URL btVerificar = LoginView.class.getClassLoader().getResource("imagenes/verificar.png");
+        if (btVerificar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btVerificar);
+            btnVerificarRecu.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Validar");
+        }
     }
 }

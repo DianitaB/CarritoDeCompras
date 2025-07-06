@@ -14,11 +14,18 @@ public class Carrito {
 
     private List<ItemCarrito> items;
 
-    public Carrito() {
+    private Usuario usuario;
+
+    public Carrito(Usuario usuario) {
+        this.usuario = usuario;
         codigo = contador++;
         items = new ArrayList<>();
         fechaCreacion = new Date();
     }
+
+    public Usuario getUsuario() {return usuario;}
+
+    public void setUsuario(Usuario usuario) {this.usuario = usuario;}
 
     public int getCodigo() {
         return codigo;

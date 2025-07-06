@@ -1,5 +1,6 @@
 package ec.edu.ups.vista.producto;
 
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
@@ -14,33 +15,22 @@ public class ProductoEliminarView extends JInternalFrame {
     private JButton btnBuscar;
     private JLabel lblNombre;
     private JLabel lblPrecio;
+    private JLabel lblCodigo;
+    private JLabel lblTituloE;
+    private MensajeInternacionalizacionHandler mensajeI;
 
-    public ProductoEliminarView() {
+    public ProductoEliminarView(MensajeInternacionalizacionHandler mensajeI) {
         setContentPane(panelPrincipal);
         setTitle("Eliminar Producto");
         setSize(400, 200);
-        //setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setClosable(true);
         setIconifiable(true);
         setResizable(true);
-        //setVisible(true);
+        this.mensajeI = mensajeI;
+        iconoIma();
+        cambiarIdioma();
 
-        URL btEliminar = LoginView.class.getClassLoader().getResource("imagenes/eliminar.png");
-        if (btEliminar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btEliminar);
-            btnEliminar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Eliminar");
-        }
-
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
     }
 
     public JPanel getPanelPrincipal() {
@@ -98,5 +88,32 @@ public class ProductoEliminarView extends JInternalFrame {
         txtCodigo.setText("");
         txtNombre.setText("");
         txtPrecio.setText("");
+    }
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("productoEliminar.titulo.ventana"));
+        lblTituloE.setText(mensajeI.get("productoEliminar.label.titulo"));
+        lblCodigo.setText(mensajeI.get("productoEliminar.label.codigo"));
+        lblNombre.setText(mensajeI.get("productoEliminar.label.nombre"));
+        lblPrecio.setText(mensajeI.get("productoEliminar.label.precio"));
+        btnBuscar.setText(mensajeI.get("productoEliminar.boton.buscar"));
+        btnEliminar.setText(mensajeI.get("productoEliminar.boton.eliminar"));
+    }
+
+    private void iconoIma(){
+        URL btEliminar = LoginView.class.getClassLoader().getResource("imagenes/eliminar.png");
+        if (btEliminar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btEliminar);
+            btnEliminar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar");
+        }
+
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
     }
 }

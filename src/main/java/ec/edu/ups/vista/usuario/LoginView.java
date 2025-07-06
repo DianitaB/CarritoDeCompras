@@ -7,6 +7,13 @@ import javax.swing.*;
 import java.util.Locale;
 
 public class LoginView extends JFrame {
+
+    private JMenuBar menuBar;
+    private JMenu menuIdiomas;
+    private JMenuItem menuItemEspañol;
+    private JMenuItem menuItemIngles;
+    private JMenuItem menuItemFrances;
+
     private JPanel panelPrincipal;
     private JPanel panelSecundario;
     private JTextField txtUsername;
@@ -41,11 +48,10 @@ public class LoginView extends JFrame {
                     mensajeInternalizacion.setLenguaje("es", "EC");
                     break;
             }
-            actualizarTextos();
+            cambiarIdioma();
         });
-
-        actualizarTextos();
-        iconosIma();
+        cambiarIdioma();
+        iconoIma();
     }
 
     public JPanel getPanelPrincipal() {
@@ -134,18 +140,16 @@ public class LoginView extends JFrame {
         }
     }
 
-    public void actualizarTextos() {
+    public void cambiarIdioma() {
         this.setTitle(mensajeInternalizacion.get("login.titulo.ventana"));
         lblUsuario.setText(mensajeInternalizacion.get("login.label.usuario"));
         lblContrasenia.setText(mensajeInternalizacion.get("login.label.contrasenia"));
         lblIdioma.setText(mensajeInternalizacion.get("menu.idioma"));
-
         btnIniciarSesion.setText(mensajeInternalizacion.get("login.boton.iniciar"));
         btnRegistrarse.setText(mensajeInternalizacion.get("login.boton.registrarse"));
         btnOlvidarContra.setText(mensajeInternalizacion.get("login.boton.recuperar"));
     }
-
-    public void iconosIma() {
+    private void iconoIma() {
         URL loginURL = LoginView.class.getClassLoader().getResource("imagenes/login.png");
         if (loginURL != null) {
             ImageIcon iconoBtnIniciarSesion = new ImageIcon(loginURL);

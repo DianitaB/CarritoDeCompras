@@ -30,41 +30,11 @@ public class CarritoModificarView extends JInternalFrame {
         modelo.setColumnIdentifiers(columnas);
         tblView.setModel(modelo);
         this.mensajeI = mensajeI;
-        cambiarIdi();
+        cambiarIdioma();
+        iconoIma();
 
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
-
-        URL btModificar = LoginView.class.getClassLoader().getResource("imagenes/modificar.png");
-        if (btModificar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btModificar);
-            btnModificar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
     }
-    public void cambiarIdi() {
-        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(),mensajeI.getLocale().getCountry());
 
-        setTitle(mensajeI.get("carrito.titulo.modificar"));
-        lblCodigo.setText(mensajeI.get("carrito.label.codigo"));
-        lblFecha.setText(mensajeI.get("carrito.label.fecha"));
-        btnBuscar.setText(mensajeI.get("carrito.boton.buscar"));
-        btnModificar.setText(mensajeI.get("carrito.boton.modificar"));
-
-        modelo.setColumnIdentifiers(new Object[]{
-                mensajeI.get("carrito.columna.codigo"),
-                mensajeI.get("carrito.columna.nombre"),
-                mensajeI.get("carrito.columna.precio"),
-                mensajeI.get("carrito.columna.cantidad"),
-                mensajeI.get("carrito.columna.total")
-        });
-    }
 
     public MensajeInternacionalizacionHandler getMensajeI() {
         return mensajeI;
@@ -144,5 +114,36 @@ public class CarritoModificarView extends JInternalFrame {
 
     public void setLblFecha(JLabel lblFecha) {
         this.lblFecha = lblFecha;
+    }
+    public void cambiarIdioma() {
+        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(),mensajeI.getLocale().getCountry());
+        setTitle(mensajeI.get("carrito.titulo.modificar"));
+        lblCodigo.setText(mensajeI.get("carrito.label.codigo"));
+        lblFecha.setText(mensajeI.get("carrito.label.fecha"));
+        btnBuscar.setText(mensajeI.get("carrito.boton.buscar"));
+        btnModificar.setText(mensajeI.get("carrito.boton.modificar"));
+        modelo.setColumnIdentifiers(new Object[]{
+                mensajeI.get("carrito.columna.codigo"),
+                mensajeI.get("carrito.columna.nombre"),
+                mensajeI.get("carrito.columna.precio"),
+                mensajeI.get("carrito.columna.cantidad"),
+                mensajeI.get("carrito.columna.total")
+        });
+    }
+    private void iconoIma(){
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
+        URL btModificar = LoginView.class.getClassLoader().getResource("imagenes/modificar.png");
+        if (btModificar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btModificar);
+            btnModificar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
     }
 }

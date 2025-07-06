@@ -35,43 +35,12 @@ public class CarritoDetalleView extends JInternalFrame {
         modelo.setColumnIdentifiers(columnas);
         tblDetCarrito.setModel(modelo);
         this.mensajeI = mensajeI;
-        cambiarIdi();
+        cambiarIdioma();
+        iconoIma();
 
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscarDetalle.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar Detalle");
-        }
 
-        URL btAceptar = LoginView.class.getClassLoader().getResource("imagenes/aceptar.png");
-        if (btAceptar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btAceptar);
-            btnAceptarDetalle.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Aceptar Detalle");
-        }
     }
-    public void cambiarIdi(){
-        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(), mensajeI.getLocale().getCountry());
 
-        setTitle(mensajeI.get("carrito.detalle.titulo.ventana"));
-        lblDetalles.setText(mensajeI.get("carrito.detalle.titulo"));
-        lblId.setText(mensajeI.get("carrito.detalle.id"));
-        lblSubtotal.setText(mensajeI.get("carrito.detalle.subtotal"));
-        lblIVA.setText(mensajeI.get("carrito.detalle.iva"));
-        lblTotal.setText(mensajeI.get("carrito.detalle.total"));
-
-        Object[] columnas = {
-                mensajeI.get("carrito.detalle.columna.codigo"),
-                mensajeI.get("carrito.detalle.columna.nombre"),
-                mensajeI.get("carrito.detalle.columna.precio"),
-                mensajeI.get("carrito.detalle.columna.cantidad"),
-                mensajeI.get("carrito.detalle.columna.subtotal")
-        };
-        modelo.setColumnIdentifiers(columnas);
-    }
     public JTextField getTxtSubtotalDet() {
         return txtSubtotalDet;
     }
@@ -133,6 +102,42 @@ public class CarritoDetalleView extends JInternalFrame {
 
     public void setPanelPrincipal(JPanel panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
+    }
+    public void cambiarIdioma(){
+        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(), mensajeI.getLocale().getCountry());
+
+        setTitle(mensajeI.get("carrito.detalle.titulo.ventana"));
+        lblDetalles.setText(mensajeI.get("carrito.detalle.titulo"));
+        lblId.setText(mensajeI.get("carrito.detalle.id"));
+        lblSubtotal.setText(mensajeI.get("carrito.detalle.subtotal"));
+        lblIVA.setText(mensajeI.get("carrito.detalle.iva"));
+        lblTotal.setText(mensajeI.get("carrito.detalle.total"));
+
+        Object[] columnas = {
+                mensajeI.get("carrito.detalle.columna.codigo"),
+                mensajeI.get("carrito.detalle.columna.nombre"),
+                mensajeI.get("carrito.detalle.columna.precio"),
+                mensajeI.get("carrito.detalle.columna.cantidad"),
+                mensajeI.get("carrito.detalle.columna.subtotal")
+        };
+        modelo.setColumnIdentifiers(columnas);
+    }
+    private void iconoIma(){
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscarDetalle.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar Detalle");
+        }
+
+        URL btAceptar = LoginView.class.getClassLoader().getResource("imagenes/aceptar.png");
+        if (btAceptar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btAceptar);
+            btnAceptarDetalle.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Aceptar Detalle");
+        }
     }
 }
 

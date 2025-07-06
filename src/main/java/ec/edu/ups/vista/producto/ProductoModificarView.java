@@ -1,5 +1,6 @@
 package ec.edu.ups.vista.producto;
 
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
@@ -13,32 +14,23 @@ public class ProductoModificarView extends JInternalFrame {
     private JTextField txtPrecio;
     private JButton btnBuscar;
     private JButton btnModificar;
+    private JLabel lblCodigo;
+    private JLabel lblNombre;
+    private JLabel lblPrecio;
+    private JLabel lblModificarProducto;
+    private MensajeInternacionalizacionHandler mensajeI;
 
-    public ProductoModificarView() {
+    public ProductoModificarView(MensajeInternacionalizacionHandler mensajeI) {
         setContentPane(panelPrincipal);
         setTitle("Modificar Producto");
         setSize(400, 250);
-        //setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setClosable(true);
         setIconifiable(true);
         setResizable(true);
-        //setVisible(true);
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
-
-        URL btModificar = LoginView.class.getClassLoader().getResource("imagenes/modificar.png");
-        if (btModificar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btModificar);
-            btnModificar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
+        this.mensajeI = mensajeI;
+        cambiarIdioma();
+        iconoIma();
     }
     public JTextField getTxtCodigo() {
         return txtCodigo;
@@ -95,5 +87,32 @@ public class ProductoModificarView extends JInternalFrame {
         txtCodigo.setText("");
         txtNombre.setText("");
         txtPrecio.setText("");
+    }
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("productoModificar.titulo.ventana"));
+        lblModificarProducto.setText(mensajeI.get("productoModificar.label.titulo"));
+        lblCodigo.setText(mensajeI.get("productoModificar.label.codigo"));
+        lblNombre.setText(mensajeI.get("productoModificar.label.nombre"));
+        lblPrecio.setText(mensajeI.get("productoModificar.label.precio"));
+        btnBuscar.setText(mensajeI.get("productoModificar.boton.buscar"));
+        btnModificar.setText(mensajeI.get("productoModificar.boton.modificar"));
+    }
+
+    private void iconoIma(){
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
+
+        URL btModificar = LoginView.class.getClassLoader().getResource("imagenes/modificar.png");
+        if (btModificar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btModificar);
+            btnModificar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
     }
 }

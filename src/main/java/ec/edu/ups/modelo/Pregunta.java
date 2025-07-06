@@ -1,12 +1,12 @@
 package ec.edu.ups.modelo;
 
-public class Preguntas {
+public class Pregunta {
     private String username;
     private String pregunta;
     private String respuesta;
     private String password;
 
-    public Preguntas(String username, String pregunta, String respuesta) {
+    public Pregunta(String username, String pregunta, String respuesta) {
         this.username = username;
         this.pregunta = pregunta;
         this.respuesta = respuesta;

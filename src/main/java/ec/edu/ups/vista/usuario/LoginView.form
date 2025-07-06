@@ -20,7 +20,7 @@
           <background color="-726785"/>
           <foreground color="-1515270"/>
         </properties>
-        <border type="line" title="Iniciar Sesión">
+        <border type="line" title="">
           <color color="-16777216"/>
         </border>
         <children>

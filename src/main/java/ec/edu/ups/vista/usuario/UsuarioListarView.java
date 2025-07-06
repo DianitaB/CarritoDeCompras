@@ -22,25 +22,10 @@ public class UsuarioListarView extends JInternalFrame{
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
-        cambiarIdi();
         modelo = new DefaultTableModel(new Object[]{"Usuario", "Rol"}, 0);
         tblListarUsuarios.setModel(modelo);
-
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagen/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconoLis = new ImageIcon(btBuscar);
-            btnBuscar.setIcon(iconoLis);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar Usuario");
-        }
-
-        URL btListar = LoginView.class.getClassLoader().getResource("imagen/listar.png");
-        if (btListar != null) {
-            ImageIcon icnoLi = new ImageIcon(btListar);
-            btnListar.setIcon(icnoLi);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Listar Usuario");
-        }
+        iconoIma();
+        cambiarIdioma();
     }
 
     public JTextField getTxtNombreUsu() {
@@ -67,9 +52,7 @@ public class UsuarioListarView extends JInternalFrame{
         this.tblListarUsuarios = tblListarUsuarios;
     }
 
-    public JLabel getLblNombre() {
-        return lblNombre;
-    }
+    public JLabel getLblNombre() {return lblNombre;}
 
     public void setLblNombre(JLabel lblNombre) {
         this.lblNombre = lblNombre;
@@ -107,11 +90,34 @@ public class UsuarioListarView extends JInternalFrame{
         this.modelo = modelo;
     }
 
-    public void cambiarIdi() {
-
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("listar.titulo.ventana"));
+        lblNombre.setText(mensajeI.get("listar.label.nombre"));
+        btnBuscar.setText(mensajeI.get("listar.boton.buscar"));
+        btnListar.setText(mensajeI.get("listar.boton.listar"));
+        modelo.setColumnIdentifiers(new String[] {
+                mensajeI.get("listar.columna.usuario"),
+                mensajeI.get("listar.columna.rol")
+        });
     }
+
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
-
+    private void iconoIma(){
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconoLis = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconoLis);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar Usuario");
+        }
+        URL btListar = LoginView.class.getClassLoader().getResource("imagenes/listar.png");
+        if (btListar != null) {
+            ImageIcon icnoLi = new ImageIcon(btListar);
+            btnListar.setIcon(icnoLi);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Listar Usuario");
+        }
+    }
 }

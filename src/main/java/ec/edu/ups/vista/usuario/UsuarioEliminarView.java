@@ -20,13 +20,9 @@ public class UsuarioEliminarView extends JInternalFrame{
         this.mensajeI = mensajeI;
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(300, 190);
-        cambiarIdi();
-        iconosIma();
-    }
-
-    public void cambiarIdi  (){
-
+        setSize(400, 250);
+        iconoIma();
+        cambiarIdioma();
     }
 
     public JTextField getTxtUsuario() {
@@ -80,11 +76,26 @@ public class UsuarioEliminarView extends JInternalFrame{
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
-    public void iconosIma(){
-        URL btEliminarr = LoginView.class.getClassLoader().getResource("imagen/delete.png");
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("eliminar.titulo.ventana"));
+        lblUsuario.setText(mensajeI.get("eliminar.label.usuario"));
+        lblContrasenia.setText(mensajeI.get("eliminar.label.contrasenia"));
+        btnBuscarE.setText(mensajeI.get("eliminar.boton.buscar"));
+        btnEliminar.setText(mensajeI.get("eliminar.boton.eliminar"));
+    }
+
+    private void iconoIma(){
+        URL btEliminarr = LoginView.class.getClassLoader().getResource("imagenes/delete.png");
         if (btEliminarr != null) {
             ImageIcon iconoEliminarU = new ImageIcon(btEliminarr);
             btnEliminar.setIcon(iconoEliminarU);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar Usuario");
+        }
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconoEliminarU = new ImageIcon(btBuscar);
+            btnBuscarE.setIcon(iconoEliminarU);
         } else {
             System.err.println("Error: No se ha cargado el icono de Eliminar Usuario");
         }

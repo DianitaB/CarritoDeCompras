@@ -1,6 +1,7 @@
 package ec.edu.ups.vista.preguntas;
 
-import ec.edu.ups.controlador.PreguntasController;
+import ec.edu.ups.controlador.RecuperacionController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.usuario.LoginView;
 
 import javax.swing.*;
@@ -13,23 +14,19 @@ public class CuestionarioRecuView extends JInternalFrame {
     private JLabel lblConfContra;
     private JLabel lblNuevaContra;
     private JPanel panelPrincipal;
-    private PreguntasController controlador;
+    private MensajeInternacionalizacionHandler mensajeI;
+    private RecuperacionController controlador;
 
 
-    public CuestionarioRecuView() {
+    public CuestionarioRecuView(MensajeInternacionalizacionHandler mensajeI) {
         super("Nueva Contraseña", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(400, 400);
-        URL btGuardar = LoginView.class.getClassLoader().getResource("imagenes/contrasenia.png");
-        if (btGuardar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btGuardar);
-            btnGuardarNueva.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Guardar Contraseña");
-        }
+        this.mensajeI = mensajeI;
+        iconoIma();
+        cambiarIdioma();
     }
-
 
     public JPasswordField getPswNueva() {
         return pswNueva;
@@ -77,6 +74,24 @@ public class CuestionarioRecuView extends JInternalFrame {
 
     public void setPanelPrincipal(JPanel panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
+    }
+
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("cuestionarioRecu.titulo.ventana"));
+        lblNuevaContra.setText(mensajeI.get("cuestionarioRecu.label.nuevaContrasenia"));
+        lblConfContra.setText(mensajeI.get("cuestionarioRecu.label.confirmarContrasenia"));
+
+        btnGuardarNueva.setText(mensajeI.get("cuestionarioRecu.boton.guardar"));
+    }
+
+    private void iconoIma(){
+        URL btGuardar = LoginView.class.getClassLoader().getResource("imagenes/contrasenia.png");
+        if (btGuardar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btGuardar);
+            btnGuardarNueva.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Guardar Contraseña");
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Carrito;
 import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.carrito.*;
@@ -26,6 +27,7 @@ public class CarritoController {
     private final CarritoDetalleView carritoDetalleView;
     private final CarritoModificarView carritoModificarView;
     private final MensajeInternacionalizacionHandler mensajeI;
+    private final Usuario usuarioA;
     private final Carrito carrito;
 
 
@@ -37,16 +39,18 @@ public class CarritoController {
                              CarritoEliminarView carritoEliminarView,
                              CarritoModificarView carritoModificarView,
                              CarritoDetalleView carritoDetalleView,
-                             MensajeInternacionalizacionHandler mensajeI) {
+                             MensajeInternacionalizacionHandler mensajeI,
+                             Usuario usuarioA) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
         this.carritoAnadirView = carritoAnadirView;
         this.carritoListarView = carritoListarView;
         this.carritoEliminarView = carritoEliminarView;
         this.carritoModificarView = carritoModificarView;
+        this.usuarioA = usuarioA;
         this.carritoDetalleView = carritoDetalleView;
         this.mensajeI = mensajeI;
-        this.carrito = new Carrito();
+        this.carrito = new Carrito(usuarioA);
         configurarEventosEnVistas();
         configurarEventosEnDetalles();
 
@@ -132,34 +136,34 @@ public class CarritoController {
         String codigoTexto = carritoEliminarView.getTxtCodigo().getText();
 
         if (!codigoTexto.matches("\\d+")) {
-            carritoEliminarView.mostrarMensaje("Ingrese un código válido.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.codigo.invalido"));
             return;
         }
         int codigo = Integer.parseInt(codigoTexto);
         Carrito carrito = carritoDAO.buscarPorCodigo(codigo);
         if (carrito == null) {
-            carritoEliminarView.mostrarMensaje("Carrito no encontrado.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.carrito.no.encontrado"));
             return;
         }
         int respuesta = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro que desea eliminar el carrito con código " + codigo + "?",
-                "Confirmación",
+                mensajeI.get("mensaje.eliminar.carrito") + " " + codigo + "?",
+                mensajeI.get("mensaje.confirmacion"),
                 JOptionPane.YES_NO_OPTION
         );
         if (respuesta == JOptionPane.YES_OPTION) {
             carritoDAO.eliminar(codigo);
-            carritoEliminarView.mostrarMensaje("Carrito eliminado correctamente.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.carrito.eliminado"));
             carritoEliminarView.limpiarCampos();
         } else {
-            carritoEliminarView.mostrarMensaje("Eliminación cancelada.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.eliminacion.cancelada"));
         }
     }
 
     private void buscarPorCodigoParaEliminar() {
         String codigoTexto = carritoEliminarView.getTxtCodigo().getText();
         if (!codigoTexto.matches("\\d+")) {
-            carritoEliminarView.mostrarMensaje("Ingrese un código válido.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.codigo.invalido"));
             return;
         }
         int codigo = Integer.parseInt(codigoTexto);
@@ -168,7 +172,7 @@ public class CarritoController {
         DefaultTableModel modelo = (DefaultTableModel) carritoEliminarView.getTblLProductos().getModel();
         modelo.setRowCount(0);
         if (carrito == null) {
-            carritoEliminarView.mostrarMensaje("Carrito no encontrado.");
+            carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.carrito.no.encontrado"));
         } else {
             for (ItemCarrito item : carrito.obtenerItems()) {
                 modelo.addRow(new Object[]{
@@ -182,10 +186,15 @@ public class CarritoController {
         }
     }
     private void buscarPorCodigo() {
+        String cTexto = carritoListarView.getTxtCodigo().getText();
+        if (cTexto == null || cTexto.isEmpty() || !cTexto.matches("\\d+")) {
+            carritoListarView.mostrarMensaje(mensajeI.get("mensaje.codigo.invalido"));
+            return;
+        }
         int codigo = Integer.parseInt(carritoListarView.getTxtCodigo().getText());
         Carrito carrito = carritoDAO.buscarPorCodigo(codigo);
         if (carrito == null) {
-            carritoListarView.mostrarMensaje("Carrito no encontrado");
+            carritoListarView.mostrarMensaje(mensajeI.get("mensaje.carrito.no.encontrado"));
             DefaultTableModel modelo = (DefaultTableModel) carritoListarView.getTblPCarrito().getModel();
             modelo.setRowCount(0);
         } else {
@@ -205,11 +214,11 @@ public class CarritoController {
     }
     private void vaciarCarrio(){
         carrito.vaciarCarrito();
-        carritoEliminarView.mostrarMensaje("Carrito Vaciado");
+        carritoEliminarView.mostrarMensaje(mensajeI.get("mensaje.carrito.vaciado"));
         carritoEliminarView.limpiarCampos();
     }
     private void limpiarCampos() {
-        carritoAnadirView.mostrarMensaje("Carrito Limpiado");
+        carritoAnadirView.mostrarMensaje(mensajeI.get("mensaje.carrito.limpiado"));
         DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
         modelo.setRowCount(0);
         carritoAnadirView.limpiarCampos();
@@ -217,17 +226,20 @@ public class CarritoController {
     }
     private void guardarCarrito() {
         carrito.setCodigo(generarCodigo());
-        System.out.println("Guardando carrito con código: " + carrito.getCodigo());
         carritoDAO.crear(carrito);
-        carritoAnadirView.mostrarMensaje("Carrito creado correctamente");
-        System.out.println(carritoDAO.listarTodos());
+        carritoAnadirView.mostrarMensaje(mensajeI.get("mensaje.carrito.creado"));
     }
     private int generarCodigo() {
         return carritoDAO.listarTodos().size() + 1;
     }
+
     private void anadirProducto() {
         int codigo = Integer.parseInt(carritoAnadirView.getTxtCodigo().getText());
         Producto producto = productoDAO.buscarPorCodigo(codigo);
+        if (producto == null) {
+            carritoAnadirView.mostrarMensaje(mensajeI.get("mensaje.producto.no.encontrado"));
+            return;
+        }
         int cantidad =  Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
         carrito.agregarProducto(producto, cantidad);
         cargarProductos();
@@ -247,7 +259,12 @@ public class CarritoController {
         }
     }
     private void listarCarrito(){
-            List<Carrito> carritos = carritoDAO.listarTodos();
+            List<Carrito> carritos;
+        if (usuarioA.getRol().name().equalsIgnoreCase("ADMIN")) {
+            carritos = carritoDAO.listarTodos();
+        } else {
+            carritos = carritoDAO.listarPorUsuario(usuarioA.getUsername());
+        }
             DefaultTableModel modelo = (DefaultTableModel) carritoListarView.getTblPCarrito().getModel();
             modelo.setRowCount(0);
 
@@ -269,9 +286,6 @@ public class CarritoController {
         String subtotal = FormateadorUtils.formatearMoneda(carrito.calcularSubtotal(), locale);
         String iva = String.valueOf(carrito.calcularIVA());
         String total = String.valueOf(carrito.calcularTotal());
-
-        System.out.println(FormateadorUtils.formatearFecha(carrito.getFechaCreacion().getTime(), locale));
-
         carritoAnadirView.getTxtSubTotal().setText(subtotal);
         carritoAnadirView.getTxtIva().setText(iva);
         carritoAnadirView.getTxtTotal().setText(total);

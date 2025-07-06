@@ -1,16 +1,15 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.CarritoController;
-import ec.edu.ups.controlador.PreguntasController;
 import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.controlador.UsuarioController;
 import ec.edu.ups.dao.CarritoDAO;
-import ec.edu.ups.dao.PreguntasDAO;
+import ec.edu.ups.dao.RecuperacionDAO;
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.dao.UsuarioDAO;
 import ec.edu.ups.dao.impl.CarritoDAOMemoria;
-import ec.edu.ups.dao.impl.PreguntasDAOMemoria;
 import ec.edu.ups.dao.impl.ProductoDAOMemoria;
+import ec.edu.ups.dao.impl.RecuperacionDAOMemoria;
 import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
@@ -41,14 +40,12 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                //Iniciar Sesion
                 LoginView loginView = new LoginView(mensajeI);
                 RegistrarseView registrarseView = new RegistrarseView(mensajeI);
-                PreguntasDAO preguntasDAO = new PreguntasDAOMemoria();
-                CuestionarioView cuestionarioView = new CuestionarioView();
-                CuestionarioRecuView cuestionarioRecuView = new CuestionarioRecuView();
-
-                UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView, registrarseView);
+                RecuperacionDAO preguntasDAO = new RecuperacionDAOMemoria();
+                CuestionarioView cuestionarioView = new CuestionarioView(mensajeI);
+                CuestionarioRecuView cuestionarioRecuView = new CuestionarioRecuView(mensajeI);
+                UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView, registrarseView,mensajeI);
                 loginView.setVisible(true);
                 usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, preguntasDAO, mensajeI,usuarioController);
 
@@ -57,40 +54,35 @@ public class Main {
                     public void windowClosed(WindowEvent e) {
                         Usuario usuarioAutenticado = usuarioController.getUsuarioAutenticado();
                         if (usuarioAutenticado != null) {
-
-                            //instanciamos DAO (Singleton)
                             ProductoDAO productoDAO = new ProductoDAOMemoria();
                             CarritoDAO carritoDAO = new CarritoDAOMemoria();
-                            PreguntasDAO preguntasDAO = new PreguntasDAOMemoria();
+                            RecuperacionDAO preguntasDAO = new RecuperacionDAOMemoria();
                             MenuPrincipalView principalView = new MenuPrincipalView(mensajeI);
 
-
-                            //instancio vistas
                             ProductoAnadirView productoAnadirView = new ProductoAnadirView(mensajeI);
-                            ProductoListaView productoListaView = new ProductoListaView();
-                            ProductoModificarView productoModificarView = new ProductoModificarView();
-                            ProductoEliminarView productoEliminarView = new ProductoEliminarView();
+                            ProductoListaView productoListaView = new ProductoListaView(mensajeI);
+                            ProductoModificarView productoModificarView = new ProductoModificarView(mensajeI);
+                            ProductoEliminarView productoEliminarView = new ProductoEliminarView(mensajeI);
 
                             CarritoAnadirView carritoAnadirView = new CarritoAnadirView(mensajeI);
                             CarritoListarView carritoListarView = new CarritoListarView(mensajeI);
                             CarritoEliminarView carritoEliminarView = new CarritoEliminarView(mensajeI);
                             CarritoModificarView carritoModificarView = new CarritoModificarView(mensajeI);
                             CarritoDetalleView carritoDetalleView = new CarritoDetalleView(mensajeI);
-
                             UsuarioListarView usuarioListarView = new UsuarioListarView(mensajeI);
                             UsuarioEliminarView usuarioEliminarView = new UsuarioEliminarView(mensajeI);
                             UsuarioModificarView usuarioModificarView = new UsuarioModificarView(mensajeI);
+                            usuarioController.setMenuPrincipalView(principalView);
+                            principalView.setVisible(true);
 
-
-
-                            //instanciamos Controladores
                             ProductoController productoController = new ProductoController(
                                     productoAnadirView,
                                     productoListaView,
                                     productoModificarView,
                                     productoEliminarView,
                                     carritoAnadirView,
-                                    productoDAO
+                                    productoDAO,
+                                    mensajeI
                             );
                             CarritoController carritoController = new CarritoController(
                                     carritoDAO,
@@ -100,23 +92,20 @@ public class Main {
                                     carritoEliminarView,
                                     carritoModificarView,
                                     carritoDetalleView,
-                                    mensajeI);
+                                    mensajeI, usuarioAutenticado
+                                    );
 
-                            // añadir producto
                             productoController.setProductoAnadirView(productoAnadirView);
-                            //listar producto
                             productoController.setProductoListaView(productoListaView);
-                            // modificar producto
                             productoController.setProductoModificarView(productoModificarView);
-                            // eliminar producto
                             productoController.setProductoEliminarView(productoEliminarView);
-                            // carrito
                             productoController.setCarritoAnadirView(carritoAnadirView);
-                            // usuario
                             usuarioController.setUsuarioListarView(usuarioListarView);
-                            usuarioController.setMenuPrincipalView(principalView);
                             usuarioController.setUsuarioEliminarView(usuarioEliminarView);
-
+                            usuarioController.setMensajeInternacionalizacionHandler(mensajeI);
+                            usuarioController.setUsuarioModificarView(usuarioModificarView);
+                            principalView.configurarOpcionesPorRolUsuario(usuarioAutenticado.getRol().name());
+                            principalView.mostrarUsuario(usuarioAutenticado.getUsername());
 
                             principalView.getMenuItemModificarUsuario().addActionListener(new ActionListener() {
                                 @Override
@@ -147,6 +136,7 @@ public class Main {
                                     }
                                 }
                             });
+
                             principalView.getMenuItemBuscarCarrito().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -234,13 +224,18 @@ public class Main {
                                     principalView.cambiarIdioma("fr", "FR");
                                 }
                             });
-                            principalView.getMenuItemCerrarSesion().addActionListener(new ActionListener() {
+                            principalView.getMenuItemEliminarUsuario().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    usuarioController.cerrarSesion();
+                                    usuarioController.eliminarUsuario();
                                 }
                             });
-
+                            principalView.getMenuItemBuscarUsuario().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    usuarioController.buscarUsuario();
+                                }
+                            });
                         }
                     }
                 });

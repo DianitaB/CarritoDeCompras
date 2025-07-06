@@ -35,42 +35,14 @@ public class ProductoAnadirView extends JInternalFrame  {
         setClosable(true);
         setIconifiable(true);
         setResizable(true);
-        //setLocationRelativeTo(null);
-       // setVisible(true);
-        //pack();
         this.mensajeI = mensajeI;
-
-        URL btAceptar = LoginView.class.getClassLoader().getResource("imagenes/aceptar.png");
-        if (btAceptar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btAceptar);
-            btnAceptar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Aceptar");
-        }
-
-        URL btLimpiar = LoginView.class.getClassLoader().getResource("imagenes/limpiar.png");
-        if (btLimpiar != null) {
-            ImageIcon iconBtnLimpiar = new ImageIcon(btLimpiar);
-            btnLimpiar.setIcon(iconBtnLimpiar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Limpiar");
-        }
+        iconoIma();
 
         btnLimpiar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {limpiarCampos(); }
         });
-        cambiarIdi();
-    }
-    
-    public void cambiarIdi() {
-        setTitle(mensajeI.get("producto.crear.titulo"));
-        lblProducto.setText(mensajeI.get("producto.label.productos"));
-        lblCodigo.setText(mensajeI.get("producto.label.codigo"));
-        lblNombre.setText(mensajeI.get("producto.label.nombre"));
-        lblPrecio.setText(mensajeI.get("producto.label.precio"));
-        btnAceptar.setText(mensajeI.get("producto.boton.aceptar"));
-        btnLimpiar.setText(mensajeI.get("producto.boton.limpiar"));
+        cambiarIdioma();
     }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
@@ -85,7 +57,6 @@ public class ProductoAnadirView extends JInternalFrame  {
             System.out.println(producto);
         }
     }
-
     public JPanel getPanelPrincipal() {
         return panelPrincipal;
     }
@@ -134,4 +105,31 @@ public class ProductoAnadirView extends JInternalFrame  {
         this.btnLimpiar = btnLimpiar;
     }
 
+    public void cambiarIdioma() {
+        setTitle(mensajeI.get("producto.crear.titulo"));
+        lblProducto.setText(mensajeI.get("producto.label.productos"));
+        lblCodigo.setText(mensajeI.get("producto.label.codigo"));
+        lblNombre.setText(mensajeI.get("producto.label.nombre"));
+        lblPrecio.setText(mensajeI.get("producto.label.precio"));
+        btnAceptar.setText(mensajeI.get("producto.boton.aceptar"));
+        btnLimpiar.setText(mensajeI.get("producto.boton.limpiar"));
+    }
+
+    private void iconoIma(){
+        URL btAceptar = LoginView.class.getClassLoader().getResource("imagenes/aceptar.png");
+        if (btAceptar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btAceptar);
+            btnAceptar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Aceptar");
+        }
+
+        URL btLimpiar = LoginView.class.getClassLoader().getResource("imagenes/limpiar.png");
+        if (btLimpiar != null) {
+            ImageIcon iconBtnLimpiar = new ImageIcon(btLimpiar);
+            btnLimpiar.setIcon(iconBtnLimpiar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Limpiar");
+        }
+    }
 }

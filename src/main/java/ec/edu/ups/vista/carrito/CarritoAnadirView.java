@@ -42,34 +42,12 @@ public class CarritoAnadirView extends JInternalFrame {
         Object[] columnas = {"Codigo", "Nombre", "Precio", "Cantidad", "Subtotal"};
         modelo.setColumnIdentifiers(columnas);
         tblProductos.setModel(modelo);
-
         cargarDatos();
-        cambiarIdi();
+        cambiarIdioma();
         iconoIma();
 
     }
-    public void cambiarIdi(){
-        setTitle(mensajeI.get("carrito.anadir.titulo"));
-        lblCodigo.setText(mensajeI.get("carrito.anadir.codigo"));
-        lblCantidad.setText(mensajeI.get("carrito.anadir.cantidad"));
-        lblNombre.setText(mensajeI.get("carrito.anadir.nombre"));
-        lblSubtotal.setText(mensajeI.get("carrito.anadir.subtotal"));
-        lblIVA.setText(mensajeI.get("carrito.anadir.iva"));
-        lblTotal.setText(mensajeI.get("carrito.anadir.total"));
 
-        btnAñadir.setText(mensajeI.get("carrito.anadir.boton.anadir"));
-        btnGuardar.setText(mensajeI.get("carrito.anadir.boton.guardar"));
-        btnBuscar2.setText(mensajeI.get("carrito.anadir.boton.buscar"));
-        btnLimpiar.setText(mensajeI.get("carrito.anadir.boton.limpiar"));
-
-        modelo.setColumnIdentifiers(new Object[]{
-                mensajeI.get("carrito.anadir.tabla.codigo"),
-                mensajeI.get("carrito.anadir.tabla.nombre"),
-                mensajeI.get("carrito.anadir.tabla.precio"),
-                mensajeI.get("carrito.anadir.tabla.cantidad"),
-                mensajeI.get("carrito.anadir.tabla.subtotal")
-        });
-    }
     private void cargarDatos(){
         cbxCantidad.removeAllItems();
         for(int i = 0; i < 20; i++){
@@ -187,6 +165,29 @@ public class CarritoAnadirView extends JInternalFrame {
 
     public void setMensajeI(MensajeInternacionalizacionHandler mensajeI) {
         this.mensajeI = mensajeI;
+    }
+
+    public void cambiarIdioma(){
+        setTitle(mensajeI.get("carrito.anadir.titulo"));
+        lblCodigo.setText(mensajeI.get("carrito.anadir.codigo"));
+        lblCantidad.setText(mensajeI.get("carrito.anadir.cantidad"));
+        lblNombre.setText(mensajeI.get("carrito.anadir.nombre"));
+        lblSubtotal.setText(mensajeI.get("carrito.anadir.subtotal"));
+        lblIVA.setText(mensajeI.get("carrito.anadir.iva"));
+        lblTotal.setText(mensajeI.get("carrito.anadir.total"));
+
+        btnAñadir.setText(mensajeI.get("carrito.anadir.boton.anadir"));
+        btnGuardar.setText(mensajeI.get("carrito.anadir.boton.guardar"));
+        btnBuscar2.setText(mensajeI.get("carrito.anadir.boton.buscar"));
+        btnLimpiar.setText(mensajeI.get("carrito.anadir.boton.limpiar"));
+
+        modelo.setColumnIdentifiers(new Object[]{
+                mensajeI.get("carrito.anadir.tabla.codigo"),
+                mensajeI.get("carrito.anadir.tabla.nombre"),
+                mensajeI.get("carrito.anadir.tabla.precio"),
+                mensajeI.get("carrito.anadir.tabla.cantidad"),
+                mensajeI.get("carrito.anadir.tabla.subtotal")
+        });
     }
 
     public void limpiarCampos() {

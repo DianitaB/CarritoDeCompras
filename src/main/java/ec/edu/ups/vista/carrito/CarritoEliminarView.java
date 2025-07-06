@@ -24,58 +24,18 @@ public class CarritoEliminarView extends JInternalFrame {
         super("Eliminar Carrito", true, true, false, true);
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 500);
+        setSize(600, 500);
 
         modelo = new DefaultTableModel();
         Object[] columnas = {"Código", "Nombre", "Precio", "Cantidad", "Total"};
         modelo.setColumnIdentifiers(columnas);
         tblLProductos.setModel(modelo);
         this.mensajeI = mensajeI;
-        cambiarIdi();
+        cambiarIdioma();
+        iconoIma();
 
-        URL btEliminar = LoginView.class.getClassLoader().getResource("imagenes/eliminar.png");
-        if (btEliminar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btEliminar);
-            btnEliminar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Eliminar");
-        }
-
-        URL btVaciar = LoginView.class.getClassLoader().getResource("imagenes/vaciar.png");
-        if (btVaciar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btVaciar);
-            btnVaciar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Eliminar");
-        }
-
-        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
-        if (btBuscar != null) {
-            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
-            btnBuscar.setIcon(iconBtnAceptar);
-        } else {
-            System.err.println("Error: No se ha cargado el icono de Buscar");
-        }
 
     }
-    public void cambiarIdi(){
-        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(), mensajeI.getLocale().getCountry());
-        setTitle(mensajeI.get("carrito.eliminar.titulo"));
-        lblCodigo.setText(mensajeI.get("carrito.eliminar.codigo"));
-        lblFecha.setText(mensajeI.get("carrito.eliminar.fecha"));
-
-        btnBuscar.setText(mensajeI.get("carrito.eliminar.boton.buscar"));
-        btnEliminar.setText(mensajeI.get("carrito.eliminar.boton.eliminar"));
-        btnVaciar.setText(mensajeI.get("carrito.eliminar.boton.vaciar"));
-
-        modelo.setColumnIdentifiers(new Object[]{
-                mensajeI.get("carrito.eliminar.tabla.codigo"),
-                mensajeI.get("carrito.eliminar.tabla.nombre"),
-                mensajeI.get("carrito.eliminar.tabla.precio"),
-                mensajeI.get("carrito.eliminar.tabla.cantidad")
-        });
-    }
-
     public JTextField getTxtCodigo() {
         return txtCodigo;
     }
@@ -128,5 +88,49 @@ public class CarritoEliminarView extends JInternalFrame {
     }
     public void limpiarCampos() {
         txtCodigo.setText("");
+    }
+
+    public void cambiarIdioma(){
+        mensajeI.setLenguaje(mensajeI.getLocale().getLanguage(), mensajeI.getLocale().getCountry());
+        setTitle(mensajeI.get("carrito.eliminar.titulo"));
+        lblCodigo.setText(mensajeI.get("carrito.eliminar.codigo"));
+        lblFecha.setText(mensajeI.get("carrito.eliminar.fecha"));
+
+        btnBuscar.setText(mensajeI.get("carrito.eliminar.boton.buscar"));
+        btnEliminar.setText(mensajeI.get("carrito.eliminar.boton.eliminar"));
+        btnVaciar.setText(mensajeI.get("carrito.eliminar.boton.vaciar"));
+
+        modelo.setColumnIdentifiers(new Object[]{
+                mensajeI.get("carrito.eliminar.tabla.codigo"),
+                mensajeI.get("carrito.eliminar.tabla.nombre"),
+                mensajeI.get("carrito.eliminar.tabla.precio"),
+                mensajeI.get("carrito.eliminar.tabla.cantidad")
+        });
+    }
+
+    private void iconoIma(){
+        URL btEliminar = LoginView.class.getClassLoader().getResource("imagenes/eliminar.png");
+        if (btEliminar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btEliminar);
+            btnEliminar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar");
+        }
+
+        URL btVaciar = LoginView.class.getClassLoader().getResource("imagenes/vaciar.png");
+        if (btVaciar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btVaciar);
+            btnVaciar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Eliminar");
+        }
+
+        URL btBuscar = LoginView.class.getClassLoader().getResource("imagenes/buscar.png");
+        if (btBuscar != null) {
+            ImageIcon iconBtnAceptar = new ImageIcon(btBuscar);
+            btnBuscar.setIcon(iconBtnAceptar);
+        } else {
+            System.err.println("Error: No se ha cargado el icono de Buscar");
+        }
     }
 }

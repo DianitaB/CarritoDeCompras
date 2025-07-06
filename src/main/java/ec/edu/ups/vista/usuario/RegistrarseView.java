@@ -34,7 +34,9 @@ public class RegistrarseView extends JFrame {
     private JLabel lblResp3;
     private JLabel lblUsuario;
     private JLabel lblContrasenia;
-    private JPanel lblConfContrasenia;
+    private JPanel panelConf;
+    private JButton btnGuardarRespuestas;
+    private JLabel lblConfContra;
     private MensajeInternacionalizacionHandler mensajeI;
 
 
@@ -47,10 +49,8 @@ public class RegistrarseView extends JFrame {
         this.mensajeI = mensajeI;
         iconoIma();
         cargarPreguntas();
+        cambiarIdioma();
     }
-
-
-
     public JTextField getTxtNombresCom() {
         return txtNombresCom;
     }
@@ -236,11 +236,11 @@ public class RegistrarseView extends JFrame {
     }
 
     public JPanel getLblConfContrasenia() {
-        return lblConfContrasenia;
+        return panelConf;
     }
 
     public void setLblConfContrasenia(JPanel lblConfContrasenia) {
-        this.lblConfContrasenia = lblConfContrasenia;
+        this.panelConf = lblConfContrasenia;
     }
 
     public MensajeInternacionalizacionHandler getMensajeI() {
@@ -282,23 +282,39 @@ public class RegistrarseView extends JFrame {
     public void setTxtConfirmarContrasenia(JPasswordField txtConfirmarContrasenia) {
         this.txtConfirmarContrasenia = txtConfirmarContrasenia;
     }
-
     public JButton getBtnRegistrarse2() {
         return btnRegistrarse2;
     }
-
     public void setBtnRegistrarse2(JButton btnRegistrarse2) {
         this.btnRegistrarse2 = btnRegistrarse2;
     }
     public String getContraseniaComoTexto() {
         return new String(txtContrasenia.getPassword());
     }
-
     public String getConfirmarContraseniaComoTexto() {
         return new String(txtConfirmarContrasenia.getPassword());
     }
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje);
+    }
+    public void cambiarIdioma() {
+        this.setTitle(mensajeI.get("registro.titulo.ventana"));
+        lblUsuario.setText(mensajeI.get("registro.label.usuario"));
+        lblContrasenia.setText(mensajeI.get("registro.label.contrasenia"));
+        lblConfContra.setText(mensajeI.get("registro.label.confirmar"));
+        lblNombres.setText(mensajeI.get("registro.label.nombres"));
+        lblFechaNa.setText(mensajeI.get("registro.label.fechaNacimiento"));
+        lblCorreo.setText(mensajeI.get("registro.label.correo"));
+        lblTelefono.setText(mensajeI.get("registro.label.telefono"));
+        lblPreguntas.setText(mensajeI.get("registro.label.preguntas"));
+        lblPre1.setText(mensajeI.get("registro.label.pregunta1"));
+        lblResp1.setText(mensajeI.get("registro.label.respuesta1"));
+        lblPre2.setText(mensajeI.get("registro.label.pregunta2"));
+        lblResp2.setText(mensajeI.get("registro.label.respuesta2"));
+        lblPre3.setText(mensajeI.get("registro.label.pregunta3"));
+        lblResp3.setText(mensajeI.get("registro.label.respuesta3"));
+        btnRegistrarse2.setText(mensajeI.get("registro.boton.registrarse"));
+        btnGuardarRespuestas.setText(mensajeI.get("registro.boton.guardarRespuestas"));
     }
     private void cargarPreguntas() {
         String[] preguntas = {

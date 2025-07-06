@@ -2,6 +2,7 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.carrito.CarritoAnadirView;
 import ec.edu.ups.vista.producto.ProductoAnadirView;
 import ec.edu.ups.vista.producto.ProductoEliminarView;
@@ -20,15 +21,17 @@ public class ProductoController {
     private ProductoModificarView productoModificarView;
     private ProductoEliminarView productoEliminarView;
     private CarritoAnadirView carritoAnadirView;
+    private MensajeInternacionalizacionHandler mensajeI;
     private final ProductoDAO productoDAO;
 
-    public ProductoController(ProductoAnadirView productoAnadirView, ProductoListaView productoListaView, ProductoModificarView productoModificarView, ProductoEliminarView productoEliminarView, CarritoAnadirView carritoAnadirView, ProductoDAO productoDAO) {
+    public ProductoController(ProductoAnadirView productoAnadirView, ProductoListaView productoListaView, ProductoModificarView productoModificarView, ProductoEliminarView productoEliminarView, CarritoAnadirView carritoAnadirView, ProductoDAO productoDAO,MensajeInternacionalizacionHandler mensajeI) {
         this.productoAnadirView = productoAnadirView;
         this.productoListaView = productoListaView;
         this.productoModificarView = productoModificarView;
         this.productoEliminarView = productoEliminarView;
         this.carritoAnadirView = carritoAnadirView;
         this.productoDAO = productoDAO;
+        this.mensajeI = mensajeI;
     }
     public void setProductoAnadirView(ProductoAnadirView productoAnadirView) {
         this.productoAnadirView = productoAnadirView;
@@ -117,7 +120,7 @@ public class ProductoController {
             productoEliminarView.getTxtNombre().setText(producto.getNombre());
             productoEliminarView.getTxtPrecio().setText(String.valueOf(producto.getPrecio()));
         } else {
-            productoEliminarView.mostrarMensaje("Producto no encontrado");
+            productoEliminarView.mostrarMensaje(mensajeI.get("producto.no.encontrado"));
             productoEliminarView.limpiarCampos();
         }
     }
@@ -125,17 +128,17 @@ public class ProductoController {
     private void eliminarProducto() {
         int respuesta = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro que desea eliminar este producto?",
-                "Confirmación",
+                mensajeI.get("producto.confirmar.eliminar"),
+                mensajeI.get("producto.confirmar.titulo"),
                 JOptionPane.YES_NO_OPTION
         );
         if (respuesta == JOptionPane.YES_OPTION) {
             int codigo = Integer.parseInt(productoEliminarView.getTxtCodigo().getText());
             productoDAO.eliminar(codigo);
-            productoEliminarView.mostrarMensaje("Producto eliminado correctamente");
+            productoEliminarView.mostrarMensaje(mensajeI.get("producto.eliminado.exito"));
             productoEliminarView.limpiarCampos();
         } else {
-            productoEliminarView.mostrarMensaje("Eliminación cancelada");
+            productoEliminarView.mostrarMensaje(mensajeI.get("producto.eliminado.cancelado"));
         }
     }
     private void buscarProductoParaModificar() {
@@ -146,7 +149,7 @@ public class ProductoController {
             productoModificarView.getTxtNombre().setText(producto.getNombre());
             productoModificarView.getTxtPrecio().setText(String.valueOf(producto.getPrecio()));
         } else {
-            productoModificarView.mostrarMensaje("Producto no encontrado");
+            productoModificarView.mostrarMensaje(mensajeI.get("producto.no.encontrado"));
             productoModificarView.limpiarCampos();
         }
     }
@@ -158,7 +161,7 @@ public class ProductoController {
 
         Producto producto = new Producto(codigo, nombre, precio);
         productoDAO.actualizar(producto);
-        productoModificarView.mostrarMensaje("Producto modificado correctamente");
+        productoModificarView.mostrarMensaje(mensajeI.get("producto.modificado.exito"));
         productoModificarView.limpiarCampos();
     }
 
@@ -168,7 +171,7 @@ public class ProductoController {
         double precio = Double.parseDouble(productoAnadirView.getTxtPrecio().getText());
 
         productoDAO.crear(new Producto(codigo, nombre, precio));
-        productoAnadirView.mostrarMensaje("Producto guardado correctamente");
+        productoAnadirView.mostrarMensaje(mensajeI.get("producto.guardado.exito"));
         productoAnadirView.limpiarCampos();
         productoAnadirView.mostrarProductos(productoDAO.listarTodos());
     }

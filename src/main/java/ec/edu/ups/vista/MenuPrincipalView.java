@@ -38,14 +38,76 @@ public class MenuPrincipalView extends JFrame {
 
     private JMenuItem menuItemCerrarSesion;
 
-
     private JDesktopPane jDesktopPane;
     private JLabel lblUsuario;
+
 
     public MenuPrincipalView(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler) {
         this.mensajeInternacionalizacionHandler = mensajeInternacionalizacionHandler;
         initComponents();
-        agregarListeners();
+
+    }
+
+    public void configurarOpcionesPorRolUsuario(String rol) {
+        if ("ADMIN".equalsIgnoreCase(rol) || "ADMINISTRADOR".equalsIgnoreCase(rol)) {
+            menuUsuario.setVisible(true);
+            menuProducto.setVisible(true);
+            menuCarrito.setVisible(true);
+            menuCerrarSesion.setVisible(true);
+            menuIdioma.setVisible(true);
+
+            menuUsuario.setEnabled(true);
+            menuProducto.setEnabled(true);
+            menuCarrito.setEnabled(true);
+            menuCerrarSesion.setEnabled(true);
+            menuIdioma.setEnabled(true);
+
+            menuItemModificarUsuario.setEnabled(true);
+            menuItemEliminarUsuario.setEnabled(true);
+            menuItemBuscarUsuario.setEnabled(true);
+
+            menuItemCrearProducto.setEnabled(true);
+            menuItemEliminarProducto.setEnabled(true);
+            menuItemModificarProducto.setEnabled(true);
+            menuItemBuscarProducto.setEnabled(true);
+
+            menuItemAñadirCarrito.setEnabled(true);
+            menuItemBuscarCarrito.setEnabled(true);
+            menuItemEliminarCarrito.setEnabled(true);
+
+            menuItemCerrarSesion.setEnabled(true);
+
+            menuItemIdiomaEspanol.setEnabled(true);
+            menuItemIdiomaIngles.setEnabled(true);
+            menuItemIdiomaFrances.setEnabled(true);
+
+        } else {
+            menuUsuario.setVisible(false);
+
+            menuProducto.setVisible(true);
+            menuCarrito.setVisible(true);
+            menuCerrarSesion.setVisible(true);
+            menuIdioma.setVisible(true);
+
+            menuProducto.setEnabled(true);
+            menuItemCrearProducto.setEnabled(false);
+            menuItemEliminarProducto.setEnabled(false);
+            menuItemModificarProducto.setEnabled(false);
+            menuItemBuscarProducto.setEnabled(true);
+
+            menuCarrito.setEnabled(true);
+            menuItemAñadirCarrito.setEnabled(true);
+            menuItemBuscarCarrito.setEnabled(true);
+            menuItemEliminarCarrito.setEnabled(true);
+
+            menuCerrarSesion.setEnabled(true);
+            menuItemCerrarSesion.setEnabled(true);
+
+            menuIdioma.setEnabled(true);
+            menuItemIdiomaEspanol.setEnabled(true);
+            menuItemIdiomaIngles.setEnabled(true);
+            menuItemIdiomaFrances.setEnabled(true);
+        }
     }
 
     public JMenu getMenuUsuario() {
@@ -95,7 +157,6 @@ public class MenuPrincipalView extends JFrame {
     public void setMenuBar(JMenuBar menuBar) {
         this.menuBar = menuBar;
     }
-
 
     public JMenu getMenuProducto() {
         return menuProducto;
@@ -245,7 +306,6 @@ public class MenuPrincipalView extends JFrame {
         this.menuItemBuscarCarrito = menuItemBuscarCarrito;
     }
 
-
     private void initComponents() {
         jDesktopPane = new MiJDesktopPane();
         menuBar = new JMenuBar();
@@ -297,7 +357,6 @@ public class MenuPrincipalView extends JFrame {
         menuIdioma.add(menuItemIdiomaIngles);
         menuIdioma.add(menuItemIdiomaFrances);
 
-
         setJMenuBar(menuBar);
         setContentPane(jDesktopPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -315,22 +374,6 @@ public class MenuPrincipalView extends JFrame {
         panelSuperior.add(lblUsuario, BorderLayout.EAST);
 
         add(panelSuperior, BorderLayout.NORTH);
-    }
-    private void agregarListeners() {
-        menuItemCerrarSesion.addActionListener(e -> {
-            int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    mensajeInternacionalizacionHandler.get("mensaje.confirmarCerrarSesion"),
-                    mensajeInternacionalizacionHandler.get("titulo.confirmar"),
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (opcion == JOptionPane.YES_OPTION) {
-                this.dispose();
-                LoginView login = new LoginView(mensajeInternacionalizacionHandler);
-                login.setVisible(true);
-            }
-        });
     }
 
     public void mostrarMensaje(String mensaje) {
@@ -373,5 +416,4 @@ public class MenuPrincipalView extends JFrame {
 
         menuItemCerrarSesion.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
     }
-
 }
