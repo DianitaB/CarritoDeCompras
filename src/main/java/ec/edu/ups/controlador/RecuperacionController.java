@@ -57,7 +57,6 @@ public class RecuperacionController {
         String respuesta = cuestionarioView.getTxtRespuestaRecu().getText();
         if (preguntaActual != null && preguntaActual.getRespuesta().equalsIgnoreCase(respuesta.trim())) {
             JOptionPane.showMessageDialog(cuestionarioView, mensajeI.get("respuesta.correcta"));
-            usuarioController.mostrarVentanaInterna(cuestionarioRecuView);
         } else {
             JOptionPane.showMessageDialog(cuestionarioView, mensajeI.get("respuesta.incorrecta"));
         }

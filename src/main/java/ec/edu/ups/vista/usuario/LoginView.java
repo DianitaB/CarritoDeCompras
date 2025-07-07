@@ -139,6 +139,11 @@ public class LoginView extends JFrame {
             cbIdiomas.setSelectedIndex(0);
         }
     }
+    public void limpiarCampos() {
+        txtUsername.setText("");
+        txtContrasenia.setText("");
+        cbIdiomas.setSelectedIndex(0);
+    }
 
     public void cambiarIdioma() {
         this.setTitle(mensajeInternalizacion.get("login.titulo.ventana"));

@@ -23,7 +23,7 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
                 "valeria10diana@gmail.com",
                 "0994664467"));
 
-        crear(new Usuario("diana", "0107271108", Rol.ADMINISTRADOR)); // Usa el constructor corto
+        crear(new Usuario("diana", "0107271108", Rol.ADMINISTRADOR));
         crear(new Usuario("user", "12345", Rol.USUARIO));
     }
     public static UsuarioDAOMemoria getInstancia() {
@@ -39,17 +39,14 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
             if (usuario.getUsername() != null && usuario.getContrasenia() != null &&
                     usuario.getUsername().equals(username) &&
                     usuario.getContrasenia().equals(contrasenia)) {
-                System.out.println("Autenticación exitosa: " + username);
                 return usuario;
             }
         }
-        System.out.println("Autenticación fallida para: " + username);
         return null;
     }
     @Override
     public void crear(Usuario usuario) {
         usuarios.add(usuario);
-        System.out.println("Usuario creado: " + usuario.getUsername());
     }
     @Override
     public Usuario buscarPorUsername(String username) {

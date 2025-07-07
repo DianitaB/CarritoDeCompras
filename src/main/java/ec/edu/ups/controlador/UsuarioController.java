@@ -9,7 +9,6 @@ import ec.edu.ups.vista.preguntas.CuestionarioRecuView;
 import ec.edu.ups.vista.preguntas.CuestionarioView;
 import ec.edu.ups.vista.usuario.*;
 import ec.edu.ups.vista.MenuPrincipalView;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -18,10 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioController {
-
     private Usuario usuario;
     private final UsuarioDAO usuarioDAO;
-    private final LoginView loginView;
+    private LoginView loginView;
     private RegistrarseView registrarseView;
     private MenuPrincipalView menuPrincipalView;
     private UsuarioEliminarView usuarioEliminarView;
@@ -31,7 +29,9 @@ public class UsuarioController {
     private CuestionarioView cuestionarioView;
     private RecuperacionController preguntasController;
 
-    public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView, RegistrarseView registrarseView, MensajeInternacionalizacionHandler mensajeI) {
+    public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView,
+                             RegistrarseView registrarseView,
+                             MensajeInternacionalizacionHandler mensajeI) {
         this.usuarioDAO = usuarioDAO;
         this.loginView = loginView;
         this.usuario = null;
@@ -79,7 +79,7 @@ public class UsuarioController {
                 if (!username.isEmpty()) {
                     buscarYMostrarUsuario(username);
                 } else {
-                    JOptionPane.showMessageDialog(usuarioModificarView, "Ingrese un usuario para buscar");
+                    JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.ingrese.usuario"));
                 }
             }
         });
@@ -160,12 +160,9 @@ public class UsuarioController {
     }
 
     private void configurarEventoCerrarSesion(){
-        System.out.println("Configurando evento de cerrar sesión...");
-
         menuPrincipalView.getMenuItemCerrarSesion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Click en Cerrar Sesión detectado");
                 cerrarSesion();
             }
         });
@@ -186,7 +183,7 @@ public class UsuarioController {
         Object rolSeleccionado = usuarioModificarView.getCbxRol().getSelectedItem();
 
         if (username.isEmpty() || contrasenia.isEmpty() || rolSeleccionado == null) {
-            JOptionPane.showMessageDialog(usuarioModificarView, "Complete todos los campos para modificar");
+            JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.complete.campos"));
             return;
         }
 
@@ -198,10 +195,10 @@ public class UsuarioController {
         usuarioExistente.setRol((Rol) rolSeleccionado);
         usuarioExistente.setContrasenia(contrasenia);
         usuarioDAO.actualizar(usuarioExistente);
-        JOptionPane.showMessageDialog(usuarioModificarView, "Usuario modificado correctamente");
+        JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.usuario.modificado"));
     }
 
-    private void autenticar(){
+    public void autenticar(){
         String username = loginView.getTxtUsername().getText();
         String contrasenia = new String(loginView.getTxtContrasenia().getPassword());
 
@@ -323,9 +320,7 @@ public class UsuarioController {
         usuarioDAO.eliminar(usernameEliminar);
         usuarioEliminarView.mostrarMensaje(mensajeI.get("mensaje.usuario.eliminado"));
     }
-
     public void cerrarSesion() {
-        System.out.println("Evento cerrar sesión disparado");
         int opcion = JOptionPane.showConfirmDialog(
                 menuPrincipalView,
                 mensajeI.get("mensaje.cerrar.sesion"),
@@ -337,12 +332,17 @@ public class UsuarioController {
             if (menuPrincipalView != null) {
                 menuPrincipalView.dispose();
             }
-            LoginView loginView = new LoginView(mensajeI);
+            if (loginView == null) {
+                loginView = new LoginView(mensajeI);
+            }
+            loginView.limpiarCampos();
             loginView.setVisible(true);
+            loginView.toFront();
+            loginView.requestFocus();
+
             this.usuario = null;
         }
     }
-
 
     public void setMensajeInternacionalizacionHandler(MensajeInternacionalizacionHandler mensajeI) {
         this.mensajeI = mensajeI;

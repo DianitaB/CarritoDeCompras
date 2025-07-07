@@ -37,6 +37,7 @@ public class RegistrarseView extends JFrame {
     private JPanel panelConf;
     private JButton btnGuardarRespuestas;
     private JLabel lblConfContra;
+    private JLabel lblRegistarse;
     private MensajeInternacionalizacionHandler mensajeI;
 
 
@@ -299,6 +300,7 @@ public class RegistrarseView extends JFrame {
     }
     public void cambiarIdioma() {
         this.setTitle(mensajeI.get("registro.titulo.ventana"));
+        lblRegistarse.setText(mensajeI.get("registro.titulo.vew"));
         lblUsuario.setText(mensajeI.get("registro.label.usuario"));
         lblContrasenia.setText(mensajeI.get("registro.label.contrasenia"));
         lblConfContra.setText(mensajeI.get("registro.label.confirmar"));
@@ -318,16 +320,16 @@ public class RegistrarseView extends JFrame {
     }
     private void cargarPreguntas() {
         String[] preguntas = {
-                "¿Cuál es tu color favorito?",
-                "¿Cuál es el nombre de tu primera mascota?",
-                "¿Cuál es tu comida favorita?",
-                "¿Cuál es tu canción favorita?",
-                "¿En qué ciudad naciste?",
-                "¿Cuál es tu película favorita?",
-                "¿Cuál es el nombre de tu mejor amigo de la infancia?",
-                "¿Cuál es tu deporte favorito?",
-                "¿Qué país te gustaría visitar?",
-                "¿Cómo se llama tu profesor favorito?"
+                mensajeI.get("pregunta.colorFavorito"),
+                mensajeI.get("pregunta.nombrePrimeraMascota"),
+                mensajeI.get("pregunta.comidaFavorita"),
+                mensajeI.get("pregunta.cancionFavorita"),
+                mensajeI.get("pregunta.ciudadNacimiento"),
+                mensajeI.get("pregunta.peliculaFavorita"),
+                mensajeI.get("pregunta.mejorAmigoInfancia"),
+                mensajeI.get("pregunta.deporteFavorito"),
+                mensajeI.get("pregunta.paisVisitar"),
+                mensajeI.get("pregunta.profesorFavorito")
         };
 
         for (String p : preguntas) {
