@@ -8,17 +8,24 @@ public class ItemCarrito {
     }
 
     public ItemCarrito(Producto producto, int cantidad) {
-        this.producto = producto;
-        this.cantidad = cantidad;
+        setProducto(producto);
+        setCantidad(cantidad);
     }
 
     public void setProducto(Producto producto) {
+        if (producto == null) {
+            throw new IllegalArgumentException("El producto no puede ser nulo.");
+        }
         this.producto = producto;
     }
 
     public void setCantidad(int cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        }
         this.cantidad = cantidad;
     }
+
 
     public Producto getProducto() {
         return producto;

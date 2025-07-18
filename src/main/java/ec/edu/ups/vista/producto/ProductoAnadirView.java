@@ -44,6 +44,71 @@ public class ProductoAnadirView extends JInternalFrame  {
         });
         cambiarIdioma();
     }
+
+    public MensajeInternacionalizacionHandler getMensajeI() {
+        return mensajeI;
+    }
+
+    public void setMensajeI(MensajeInternacionalizacionHandler mensajeI) {
+        this.mensajeI = mensajeI;
+    }
+
+    public JPanel getPnlPrecio() {
+        return pnlPrecio;
+    }
+
+    public void setPnlPrecio(JPanel pnlPrecio) {
+        this.pnlPrecio = pnlPrecio;
+    }
+
+    public JPanel getPnlNombre() {
+        return pnlNombre;
+    }
+
+    public void setPnlNombre(JPanel pnlNombre) {
+        this.pnlNombre = pnlNombre;
+    }
+
+    public JPanel getPnlCodigo() {
+        return pnlCodigo;
+    }
+
+    public void setPnlCodigo(JPanel pnlCodigo) {
+        this.pnlCodigo = pnlCodigo;
+    }
+
+    public JLabel getLblProducto() {
+        return lblProducto;
+    }
+
+    public void setLblProducto(JLabel lblProducto) {
+        this.lblProducto = lblProducto;
+    }
+
+    public JLabel getLblNombre() {
+        return lblNombre;
+    }
+
+    public void setLblNombre(JLabel lblNombre) {
+        this.lblNombre = lblNombre;
+    }
+
+    public JLabel getLblCodigo() {
+        return lblCodigo;
+    }
+
+    public void setLblCodigo(JLabel lblCodigo) {
+        this.lblCodigo = lblCodigo;
+    }
+
+    public JLabel getLblPrecio() {
+        return lblPrecio;
+    }
+
+    public void setLblPrecio(JLabel lblPrecio) {
+        this.lblPrecio = lblPrecio;
+    }
+
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
