@@ -306,6 +306,7 @@ public class MenuPrincipalView extends JFrame {
         this.menuItemBuscarCarrito = menuItemBuscarCarrito;
     }
 
+
     private void initComponents() {
         jDesktopPane = new MiJDesktopPane();
         menuBar = new JMenuBar();
@@ -339,6 +340,7 @@ public class MenuPrincipalView extends JFrame {
         menuBar.add(menuIdioma);
         menuBar.add(menuUsuario);
         menuBar.add(menuCerrarSesion);
+        menuCerrarSesion.add(menuItemCerrarSesion);
 
         menuProducto.add(menuItemCrearProducto);
         menuProducto.add(menuItemEliminarProducto);
@@ -378,13 +380,6 @@ public class MenuPrincipalView extends JFrame {
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
-    }
-
-    public void deshabilitarMenusAdministrador() {
-        getMenuItemCrearProducto().setEnabled(false);
-        getMenuItemBuscarProducto().setEnabled(false);
-        getMenuItemModificarProducto().setEnabled(false);
-        getMenuItemEliminarProducto().setEnabled(false);
     }
 
     public void cambiarIdioma(String lenguaje, String pais){

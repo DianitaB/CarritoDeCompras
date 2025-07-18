@@ -22,6 +22,13 @@ public class Carrito {
         items = new ArrayList<>();
         fechaCreacion = new Date();
     }
+    public Carrito() {
+        this.usuario = null;
+        codigo = contador++;
+        items = new ArrayList<>();
+        fechaCreacion = new Date();
+    }
+
 
     public Usuario getUsuario() {return usuario;}
 
