@@ -19,7 +19,8 @@ public class CuestionarioRecuView extends JInternalFrame {
 
 
     public CuestionarioRecuView(MensajeInternacionalizacionHandler mensajeI) {
-        super("Nueva Contraseña", true, true, false, true);
+        initComponents();
+        super.setTitle("Nueva Contraseña");
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(400, 400);
@@ -74,6 +75,9 @@ public class CuestionarioRecuView extends JInternalFrame {
 
     public void setPanelPrincipal(JPanel panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
+    }
+    private void initComponents(){
+
     }
 
     public void cambiarIdioma() {

@@ -7,12 +7,19 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación que utiliza archivos de texto para almacenar datos.
+ */
 public class RecuperacionDAOTexto implements RecuperacionDAO {
 
     private final File archivoPreguntas;
 
     public RecuperacionDAOTexto(String rutaArchivo) {
-        archivoPreguntas = new File(rutaArchivo);
+        this.archivoPreguntas = new File(rutaArchivo);
+        File carpeta = archivoPreguntas.getParentFile();
+        if (carpeta != null && !carpeta.exists()) {
+            carpeta.mkdirs();
+        }
         try {
             if (!archivoPreguntas.exists()) {
                 archivoPreguntas.createNewFile();
@@ -22,6 +29,11 @@ public class RecuperacionDAOTexto implements RecuperacionDAO {
         }
     }
 
+    /**
+     * Guarda una nueva pregunta o actualiza una existente según el nombre de usuario.
+     * Si ya existe una pregunta para el usuario, se reemplaza.
+     * @param pregunta Objeto Pregunta que contiene el username, la pregunta y la respuesta
+     */
     @Override
     public void guardar(Pregunta pregunta) {
         List<Pregunta> preguntas = listarTodos();
@@ -39,6 +51,11 @@ public class RecuperacionDAOTexto implements RecuperacionDAO {
         guardarTodasPreguntas(preguntas);
     }
 
+    /**
+     * Busca una pregunta de recuperación por nombre de usuario.
+     * @param username El nombre de usuario
+     * @return La pregunta correspondiente, o null si no se encuentra
+     */
     @Override
     public Pregunta buscarPorUsername(String username) {
         List<Pregunta> preguntas = listarTodos();
@@ -50,6 +67,10 @@ public class RecuperacionDAOTexto implements RecuperacionDAO {
         return null;
     }
 
+    /**
+     * Carga todas las preguntas almacenadas desde el archivo de texto.
+     *  * @return Lista de preguntas recuperadas
+     */
     private List<Pregunta> listarTodos() {
         List<Pregunta> preguntas = new ArrayList<>();
         if (!archivoPreguntas.exists()) return preguntas;
@@ -67,6 +88,11 @@ public class RecuperacionDAOTexto implements RecuperacionDAO {
         return preguntas;
     }
 
+    /**
+     * Escribe toda la lista de preguntas en el archivo, sobrescribiendo su contenido anterior.
+     *
+     * @param preguntas Lista de preguntas a guardar
+     */
     private void guardarTodasPreguntas(List<Pregunta> preguntas) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPreguntas, false))) {
             for (Pregunta p : preguntas) {

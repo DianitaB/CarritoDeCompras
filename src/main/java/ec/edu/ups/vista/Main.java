@@ -22,6 +22,7 @@ import ec.edu.ups.vista.usuario.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Main {
     @SuppressWarnings("all")
@@ -50,6 +51,10 @@ public class Main {
                 String tipo = loginView.getTipoAlmacenamiento();
                 String ruta = loginView.getRutaArchivos();
 
+                File carpeta = new File(ruta);
+                if (!carpeta.exists()) {
+                    carpeta.mkdirs();
+                }
                 UsuarioDAO usuarioDAO_local;
                 ProductoDAO productoDAO_local;
                 CarritoDAO carritoDAO_local;
@@ -63,10 +68,10 @@ public class Main {
                         recuperacionDAO_local = new RecuperacionDAOMemoria();
                         break;
                     case "Archivo de texto":
-                        usuarioDAO_local = new UsuarioDAOTexto(ruta);
-                        productoDAO_local = new ProductoDAOTexto(ruta);
+                        usuarioDAO_local = new UsuarioDAOTexto(new File(ruta, "usuarios.txt").getAbsolutePath());
+                        productoDAO_local = new ProductoDAOTexto(new File(ruta, "productos.txt").getAbsolutePath());
                         carritoDAO_local = new CarritoDAOTexto(ruta, usuarioDAO_local, productoDAO_local);
-                        recuperacionDAO_local = new RecuperacionDAOTexto(ruta);
+                        recuperacionDAO_local = new RecuperacionDAOTexto(new File(ruta, "recuperacion.txt").getAbsolutePath());
                         break;
                     case "Archivo Binario":
                         usuarioDAO_local = new UsuarioDAOBinario(ruta);
@@ -83,7 +88,6 @@ public class Main {
 
                 usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, recuperacionDAO_local, mensajeI, usuarioController);
 
-                // Autenticar usuario con la nueva DAO
                 usuarioController.autenticar();
 
                 Usuario usuarioAutenticado = usuarioController.getUsuarioAutenticado();
@@ -141,6 +145,8 @@ public class Main {
 
                     productoController.setProductoAnadirView(productoAnadirView);
                     productoController.setProductoListaView(productoListaView);
+                    productoController.setProductoModificarView(productoModificarView);
+                    productoController.setProductoEliminarView(productoEliminarView);
 
                     principalView.setVisible(true);
                     principalView.mostrarUsuario(usuarioAutenticado.getUsername());

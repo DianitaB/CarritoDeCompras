@@ -111,12 +111,7 @@ public class UsuarioController {
                 ruta();
             }
         });
-        loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                iniciarSesion();
-            }
-        });
+
         loginView.getBtnRegistrarse().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -202,16 +197,28 @@ public class UsuarioController {
         }
     }
 
-    private void ruta(){
+    private void ruta() {
         JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Selecciona la carpeta de almacenamiento");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
         int seleccion = chooser.showOpenDialog(null);
 
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File carpetaSeleccionada = chooser.getSelectedFile();
-            loginView.getTxtCampoDeRuta().setText(carpetaSeleccionada.getAbsolutePath());
+
+            if (carpetaSeleccionada != null && carpetaSeleccionada.exists() && carpetaSeleccionada.isDirectory()) {
+                loginView.getTxtCampoDeRuta().setText(carpetaSeleccionada.getAbsolutePath());
+            } else {
+                JOptionPane.showMessageDialog(null, "La carpeta seleccionada no existe o no es válida.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una carpeta para continuar.");
         }
     }
+
+
+
 
 
     private void modificarUsuario() {
@@ -307,7 +314,7 @@ public class UsuarioController {
             respuestas.add(respuesta3);
 
             Usuario nuevoUsuario = new Usuario(usuarioT, contrasenia, Rol.USUARIO, nombre, fechaNac, correo, telefono);
-            nuevoUsuario.setCedula(cedula);
+            nuevoUsuario.setUsername(cedula);
             nuevoUsuario.setPreguntas(preguntas);
             nuevoUsuario.setRespuestas(respuestas);
 
@@ -401,75 +408,6 @@ public class UsuarioController {
 
     public void setMensajeInternacionalizacionHandler(MensajeInternacionalizacionHandler mensajeI) {
         this.mensajeI = mensajeI;
-    }
-
-    public void mostrarVentanaInterna(JInternalFrame frame) {
-        if (menuPrincipalView != null) {
-            menuPrincipalView.getjDesktopPane().add(frame);
-            frame.setVisible(true);
-            frame.toFront();
-        }
-    }
-    public void iniciarSesion() {
-        String tipo = loginView.getTipoAlmacenamiento(); // ej. "Memoria", "Archivo de texto", "Archivo Binario"
-        String ruta = loginView.getRutaArchivos();       // ruta carpeta elegida por el usuario
-
-        // Validar y crear carpeta si no es memoria
-        if (!tipo.equals("Memoria")) {
-            File carpetaBase = new File(ruta);
-            if (!carpetaBase.exists()) {
-                boolean creada = carpetaBase.mkdirs(); // crea carpetas necesarias
-                if (!creada) {
-                    JOptionPane.showMessageDialog(loginView,
-                            "No se pudo crear la carpeta para almacenar los archivos:\n" + ruta);
-                    return;
-                }
-            }
-        }
-
-        UsuarioDAO usuarioDAO_local;
-        ProductoDAO productoDAO_local;
-        CarritoDAO carritoDAO_local;
-        RecuperacionDAO recuperacionDAO_local;
-
-        // Construir rutas completas a los archivos (puedes cambiar extensiones y nombres)
-        String rutaUsuariosTxt = ruta + File.separator + "usuarios.txt";
-        String rutaUsuariosBin = ruta + File.separator + "usuarios.dat";
-
-        switch (tipo) {
-            case "Memoria":
-                usuarioDAO_local = new UsuarioDAOMemoria();
-                productoDAO_local = new ProductoDAOMemoria();
-                carritoDAO_local = new CarritoDAOMemoria();
-                recuperacionDAO_local = new RecuperacionDAOMemoria();
-                break;
-            case "Archivo de texto":
-                usuarioDAO_local = new UsuarioDAOTexto(rutaUsuariosTxt);
-                productoDAO_local = new ProductoDAOTexto(ruta);
-                carritoDAO_local = new CarritoDAOTexto(ruta, usuarioDAO_local, productoDAO_local);
-                recuperacionDAO_local = new RecuperacionDAOTexto(ruta);
-                break;
-            case "Archivo Binario":
-                usuarioDAO_local = new UsuarioDAOBinario(rutaUsuariosBin);
-                productoDAO_local = new ProductoDAOBinario(ruta);
-                carritoDAO_local = new CarritoDAOBinario(ruta, usuarioDAO_local, productoDAO_local);
-                recuperacionDAO_local = new RecuperacionDAOBinario(ruta);
-                break;
-            default:
-                JOptionPane.showMessageDialog(loginView, "Tipo de almacenamiento inválido");
-                return;
-        }
-        UsuarioController usuarioController_local = new UsuarioController(usuarioDAO_local, loginView, registrarseView, mensajeI);
-        usuarioController_local.setPreguntasDependencias(cuestionarioView,cuestionarioRecuView, recuperacionDAO_local, mensajeI, usuarioController_local);
-        usuarioController_local.autenticar();
-        Usuario usuarioAutenticado = usuarioController_local.getUsuarioAutenticado();
-
-        if (usuarioAutenticado != null) {
-            loginView.dispose();
-            autenticar();
-        } else {
-            JOptionPane.showMessageDialog(loginView, "Usuario o contraseña incorrectos");
-        }
     }
 
     private void guardarRespuestas() {

@@ -7,12 +7,20 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación que utiliza un archivo binario para productos.
+ */
 public class ProductoDAOBinario implements ProductoDAO {
 
     private final File archivo;
 
-    public ProductoDAOBinario(String rutaArchivo) {
-        this.archivo = new File(rutaArchivo);
+    public ProductoDAOBinario(String rutaCarpeta) {
+        this.archivo = new File(rutaCarpeta, "productos.dat");
+
+        File carpeta = archivo.getParentFile();
+        if (carpeta != null && !carpeta.exists()) {
+            carpeta.mkdirs();
+        }
         if (!archivo.exists()) {
             try {
                 archivo.createNewFile();
@@ -23,6 +31,10 @@ public class ProductoDAOBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Carga la lista de productos desde el archivo binario.
+     * @return Lista de productos
+     */
     private List<Producto> cargarLista() {
         if (archivo.length() == 0) return new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
@@ -32,6 +44,10 @@ public class ProductoDAOBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Guarda lalista de productos en el archivo binario.
+     * @param lista Lista de productos a guardar
+     */
     private void guardarLista(List<Producto> lista) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(lista);
@@ -40,6 +56,10 @@ public class ProductoDAOBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Crea un nuevo prodcuto y lo agrega a la lista.
+     * @param producto Objeto Producto a registar
+     */
     @Override
     public void crear(Producto producto) {
         List<Producto> lista = cargarLista();
@@ -47,11 +67,21 @@ public class ProductoDAOBinario implements ProductoDAO {
         guardarLista(lista);
     }
 
+    /**
+     * Busca un producto por su código único.
+     * @param codigo Código del producto
+     * @return Producto encontrado o null si no existe.
+     */
     @Override
     public Producto buscarPorCodigo(int codigo) {
         return cargarLista().stream().filter(p -> p.getCodigo() == codigo).findFirst().orElse(null);
     }
 
+    /**
+     * Busca un producto cuyo nombre comience con el texto proporcionado.
+     * @param nombre Nombre del producto o parte del nombre
+     * @return Lista de productos coincidentes
+     */
     @Override
     public List<Producto> buscarPorNombre(String nombre) {
         List<Producto> lista = new ArrayList<>();
@@ -61,6 +91,10 @@ public class ProductoDAOBinario implements ProductoDAO {
         return lista;
     }
 
+    /**
+     * Actualiza un producto existente en la lista.
+     * @param producto Producto con información actualizada
+     */
     @Override
     public void actualizar(Producto producto) {
         List<Producto> lista = cargarLista();
@@ -73,6 +107,10 @@ public class ProductoDAOBinario implements ProductoDAO {
         }
     }
 
+    /**
+     * Elimina un producto por su código
+     * @param codigo Código del producto a eliminar
+     */
     @Override
     public void eliminar(int codigo) {
         List<Producto> lista = cargarLista();
@@ -80,12 +118,21 @@ public class ProductoDAOBinario implements ProductoDAO {
         guardarLista(lista);
     }
 
+    /**
+     * Modifica un producto existente.
+     * @param producto Producto con datos modificados
+     * @return
+     */
     @Override
     public boolean modificar(Producto producto) {
         actualizar(producto);
         return true;
     }
 
+    /**
+     * Lista de todos los productos disponibles
+     * @return Lista completa de productos
+     */
     @Override
     public List<Producto> listarTodos() {
         return cargarLista();

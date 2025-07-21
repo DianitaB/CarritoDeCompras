@@ -2,12 +2,11 @@ package ec.edu.ups.modelo;
 
 import ec.edu.ups.modelo.Exception.CedulaValidationException;
 import ec.edu.ups.modelo.Exception.UsuarioException;
-
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario {
-    private String cedula;
     private String username;
     private String contrasenia;
     private Rol rol;
@@ -18,8 +17,7 @@ public class Usuario {
     private List<String> preguntas;
     private List<String> respuestas;
 
-    public Usuario(String cedula, String username, String contrasenia, Rol rol, String nombreCompleto, String fechaNacimiento, String correo, String telefono, List<String> preguntas, List<String> respuestas) {
-        this.cedula = cedula;
+    public Usuario( String username, String contrasenia, Rol rol, String nombreCompleto, String fechaNacimiento, String correo, String telefono, List<String> preguntas, List<String> respuestas) {
         this.username = username;
         this.contrasenia = contrasenia;
         this.rol = rol;
@@ -64,23 +62,6 @@ public class Usuario {
         this.respuestas = new ArrayList<>();
     }
 
-    public void setCedula(String cedula) throws UsuarioException {
-        if (cedula == null || cedula.isEmpty()) {
-            throw new UsuarioException("La cédula no puede estar vacía");
-        }
-        try {
-            validarCedula(cedula);
-        } catch (CedulaValidationException e) {
-            throw new UsuarioException("Cédula inválida: " + e.getMessage());
-        }
-
-        this.cedula = cedula;
-    }
-
-    public String getCedula() {
-
-        return cedula;
-    }
     public String getNombreCompleto() {
         return nombreCompleto;
     }
@@ -133,7 +114,8 @@ public class Usuario {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws UsuarioException {
+
         this.username = username;
     }
 

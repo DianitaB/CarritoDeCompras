@@ -12,17 +12,12 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Implementación de CarritoDAO para archivo de texto
- * Guarda carritos en "carritos.txt" y items en "items_carrito.txt"
- */
 public class CarritoDAOTexto implements CarritoDAO {
 
     private final String rutaCarpeta;
     private final List<Carrito> carritos = new ArrayList<>();
     private final UsuarioDAO usuarioDAO;
     private final ProductoDAO productoDAO;
-
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public CarritoDAOTexto(String rutaCarpeta, UsuarioDAO usuarioDAO, ProductoDAO productoDAO) {
@@ -34,15 +29,14 @@ public class CarritoDAOTexto implements CarritoDAO {
         if (!carpeta.exists()) {
             carpeta.mkdirs();
         }
+
         cargarCarritos();
     }
 
     private void cargarCarritos() {
         carritos.clear();
-        File archivoCarritos = new File(rutaCarpeta + "/carritos.txt");
-        if (!archivoCarritos.exists()) {
-            return;
-        }
+        File archivoCarritos = new File(rutaCarpeta, rutaCarpeta);
+        if (!archivoCarritos.exists()) return;
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivoCarritos))) {
             String linea;
@@ -50,7 +44,6 @@ public class CarritoDAOTexto implements CarritoDAO {
                 String[] partes = linea.split(",");
                 if (partes.length >= 3) {
                     Carrito c = new Carrito(null);
-
                     c.setCodigo(Integer.parseInt(partes[0]));
 
                     try {
@@ -78,10 +71,8 @@ public class CarritoDAOTexto implements CarritoDAO {
     }
 
     private void cargarItemsCarrito() {
-        File archivoItems = new File(rutaCarpeta + "/items_carrito.txt");
-        if (!archivoItems.exists()) {
-            return;
-        }
+        File archivoItems = new File(rutaCarpeta, "items_carrito.txt");
+        if (!archivoItems.exists()) return;
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivoItems))) {
             String linea;
@@ -110,8 +101,8 @@ public class CarritoDAOTexto implements CarritoDAO {
     }
 
     private void guardarCarritos() {
-        File archivoCarritos = new File(rutaCarpeta + "/carritos.txt");
-        File archivoItems = new File(rutaCarpeta + "/items_carrito.txt");
+        File archivoCarritos = new File(rutaCarpeta, "carritos.txt");
+        File archivoItems = new File(rutaCarpeta, "items_carrito.txt");
 
         try (PrintWriter pwCarritos = new PrintWriter(new FileWriter(archivoCarritos));
              PrintWriter pwItems = new PrintWriter(new FileWriter(archivoItems))) {
@@ -119,7 +110,7 @@ public class CarritoDAOTexto implements CarritoDAO {
             for (Carrito c : carritos) {
                 String fechaStr = sdf.format(c.getFechaCreacion());
                 pwCarritos.println(c.getCodigo() + "," + fechaStr + "," +
-                        (c.getUsuario() != null ? c.getUsuario().getCedula() : ""));
+                        (c.getUsuario() != null ? c.getUsuario().getUsername() : ""));
 
                 for (ItemCarrito item : c.obtenerItems()) {
                     pwItems.println(c.getCodigo() + "," +
@@ -140,12 +131,10 @@ public class CarritoDAOTexto implements CarritoDAO {
 
     @Override
     public Carrito buscarPorCodigo(int codigo) {
-        for (Carrito c : carritos) {
-            if (c.getCodigo() == codigo) {
-                return c;
-            }
-        }
-        return null;
+        return carritos.stream()
+                .filter(c -> c.getCodigo() == codigo)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -174,7 +163,7 @@ public class CarritoDAOTexto implements CarritoDAO {
     public List<Carrito> listarPorUsuario(String username) {
         List<Carrito> encontrados = new ArrayList<>();
         for (Carrito c : carritos) {
-            if (c.getUsuario() != null && c.getUsuario().getCedula().equals(username)) {
+            if (c.getUsuario() != null && c.getUsuario().getUsername().equals(username)) {
                 encontrados.add(c);
             }
         }

@@ -9,6 +9,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación de la interfaz que utiliza archivos binarios para almacenar la informacion de los carritos.
+ */
 public class CarritoDAOBinario implements CarritoDAO {
 
     private final File archivoCarritos;
@@ -17,11 +20,15 @@ public class CarritoDAOBinario implements CarritoDAO {
 
     private List<Carrito> carritos;
 
-    public CarritoDAOBinario(String rutaArchivo, UsuarioDAO usuarioDAO, ProductoDAO productoDAO) {
-        this.archivoCarritos = new File(rutaArchivo);
+    public CarritoDAOBinario(String rutaCarpeta, UsuarioDAO usuarioDAO, ProductoDAO productoDAO) {
+        this.archivoCarritos = new File(rutaCarpeta, "carritos.dat");
         this.usuarioDAO = usuarioDAO;
         this.productoDAO = productoDAO;
 
+        File carpeta = archivoCarritos.getParentFile();
+        if (carpeta != null && !carpeta.exists()) {
+            carpeta.mkdirs();
+        }
         if (!archivoCarritos.exists()) {
             try {
                 archivoCarritos.getParentFile().mkdirs();
@@ -36,6 +43,10 @@ public class CarritoDAOBinario implements CarritoDAO {
         }
     }
 
+    /**
+     * Carga la lista de carritos desde el archivo binario.
+     * @return Lista de carritos almacenados
+     */
     @SuppressWarnings("unchecked")
     private List<Carrito> cargarCarritos() {
         if (archivoCarritos.length() == 0) return new ArrayList<>();
@@ -46,6 +57,9 @@ public class CarritoDAOBinario implements CarritoDAO {
         }
     }
 
+    /**
+     * Guarda la lista de carritos actual en el archivo binario.
+     */
     private void guardarCarritos() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivoCarritos))) {
             oos.writeObject(carritos);
@@ -54,6 +68,10 @@ public class CarritoDAOBinario implements CarritoDAO {
         }
     }
 
+    /**
+     * Crea un nuevo carrito y lo agrega a la lista, asignando un código autómatico.
+     * @param carrito Objeto Carrito a registar
+     */
     @Override
     public void crear(Carrito carrito) {
         int codigoMax = carritos.stream()
@@ -65,6 +83,11 @@ public class CarritoDAOBinario implements CarritoDAO {
         guardarCarritos();
     }
 
+    /**
+     * Busca un carrito por su código.
+     * @param codigo Código del carrito
+     * @return Carrito encontrado o null si no existe
+     */
     @Override
     public Carrito buscarPorCodigo(int codigo) {
         for (Carrito c : carritos) {
@@ -73,6 +96,10 @@ public class CarritoDAOBinario implements CarritoDAO {
         return null;
     }
 
+    /**
+     * Actualiza un carrito existente en la lista.
+     * @param carrito Carrito con la información actualizada
+     */
     @Override
     public void actualizar(Carrito carrito) {
         for (int i = 0; i < carritos.size(); i++) {
@@ -85,17 +112,30 @@ public class CarritoDAOBinario implements CarritoDAO {
         throw new RuntimeException("No se encontró carrito para actualizar");
     }
 
+    /**
+     * Elimina un carrito de la lista por su código.
+     * @param codigo Código del carrito a eliminar
+     */
     @Override
     public void eliminar(int codigo) {
         carritos.removeIf(c -> c.getCodigo() == codigo);
         guardarCarritos();
     }
 
+    /**
+     * Lista todos los carritos almacenados.
+     * @return
+     */
     @Override
     public List<Carrito> listarTodos() {
         return new ArrayList<>(carritos);
     }
 
+    /**
+     * Lista los carritos pertenecientes a un usuario específico.
+     * @param username Nombre de usuario asociado a los carritos
+     * @return Lista de carritos del usuario
+     */
     @Override
     public List<Carrito> listarPorUsuario(String username) {
         List<Carrito> filtrados = new ArrayList<>();

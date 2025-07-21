@@ -7,12 +7,19 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación que almacena productos en archivos de texto
+ */
 public class ProductoDAOTexto implements ProductoDAO {
 
     private final File archivo;
 
     public ProductoDAOTexto(String rutaArchivo) {
         this.archivo = new File(rutaArchivo);
+        File carpeta = archivo.getParentFile();
+        if (carpeta != null && !carpeta.exists()) {
+            carpeta.mkdirs();
+        }
         try {
             if (!archivo.exists()) archivo.createNewFile();
         } catch (IOException e) {
@@ -20,6 +27,10 @@ public class ProductoDAOTexto implements ProductoDAO {
         }
     }
 
+    /**
+     * Lee todos los productos almacenados en el archivo de texto.
+     * @return Lista de productos leídos desde el archivo
+     */
     private List<Producto> leerTodos() {
         List<Producto> lista = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
@@ -39,6 +50,10 @@ public class ProductoDAOTexto implements ProductoDAO {
         return lista;
     }
 
+    /**
+     * Escribe la lista completa de productos en el archivo de texto, sobrescribiéndolo.
+     * @param lista
+     */
     private void escribirTodos(List<Producto> lista) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
             for (Producto p : lista) {
@@ -50,6 +65,10 @@ public class ProductoDAOTexto implements ProductoDAO {
         }
     }
 
+    /**
+     * Crea un nuevo producto y lo guarda en el archivo.
+     * @param producto Producto a registar
+     */
     @Override
     public void crear(Producto producto) {
         List<Producto> lista = leerTodos();
@@ -57,11 +76,21 @@ public class ProductoDAOTexto implements ProductoDAO {
         escribirTodos(lista);
     }
 
+    /**
+     * Busca un producto por su código único.
+     * @param codigo Código del producto
+     * @return Producto encontrado o null si no existe
+     */
     @Override
     public Producto buscarPorCodigo(int codigo) {
         return leerTodos().stream().filter(p -> p.getCodigo() == codigo).findFirst().orElse(null);
     }
 
+    /**
+     * Busca productos cuyo nombre comience con la cadena proporcionada.
+     * @param nombre Nombre del producto o parte del nombre
+     * @return Lista de productos coincidentes
+     */
     @Override
     public List<Producto> buscarPorNombre(String nombre) {
         List<Producto> lista = new ArrayList<>();
@@ -71,6 +100,10 @@ public class ProductoDAOTexto implements ProductoDAO {
         return lista;
     }
 
+    /**
+     * Actualiza un producto existente en la lista y guarda cambios en el archivo.
+     * @param producto Producto con información actualizada
+     */
     @Override
     public void actualizar(Producto producto) {
         List<Producto> lista = leerTodos();
@@ -83,6 +116,10 @@ public class ProductoDAOTexto implements ProductoDAO {
         }
     }
 
+    /**
+     * Elimina un prooducto por su código.
+     * @param codigo Código del producto a eliminar
+     */
     @Override
     public void eliminar(int codigo) {
         List<Producto> lista = leerTodos();
@@ -90,12 +127,21 @@ public class ProductoDAOTexto implements ProductoDAO {
         escribirTodos(lista);
     }
 
+    /**
+     * Modifica un producto existente
+     * @param producto Producto con datos modificados
+     * @return true si se actualizó correctamente
+     */
     @Override
     public boolean modificar(Producto producto) {
         actualizar(producto);
         return true;
     }
 
+    /**
+     * Lista todos los productos almacenados.
+     * @return
+     */
     @Override
     public List<Producto> listarTodos() {
         return leerTodos();

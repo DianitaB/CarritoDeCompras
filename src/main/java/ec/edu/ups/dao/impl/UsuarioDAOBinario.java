@@ -10,12 +10,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Implementación que almacena contenido en archivos binarios.
+ */
 public class UsuarioDAOBinario implements UsuarioDAO {
 
     private final File archivoUsuarios;
 
-    public UsuarioDAOBinario(String rutaArchivo) {
-        this.archivoUsuarios = new File(rutaArchivo);
+    public UsuarioDAOBinario(String rutaCarpeta) {
+        this.archivoUsuarios = new File(rutaCarpeta, "C:/temp/datos");
+
+        File carpeta = archivoUsuarios.getParentFile();  // obtiene la carpeta
+        if (carpeta != null && !carpeta.exists()) {
+            carpeta.mkdirs();
+        }
         try {
             if (!archivoUsuarios.exists()) {
                 archivoUsuarios.createNewFile();
@@ -26,6 +34,11 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
     }
 
+    /**
+     * Carga todos los usuarios desde el archivo binario.
+     *
+     * @return Lista de usuarios
+     */
     private List<Usuario> cargarUsuarios() {
         if (archivoUsuarios.length() == 0) {
             return new ArrayList<>();
@@ -37,6 +50,11 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
     }
 
+    /**
+     * Guarda una lista de usuarios en el archivo binario, sobrescribiendo el contenido actual.
+     *
+     * @param listaUsuarios Lista de usuarios a guardar
+     */
     private void guardarUsuarios(List<Usuario> listaUsuarios) {
         try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(archivoUsuarios))) {
             salida.writeObject(listaUsuarios);
@@ -45,6 +63,12 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
     }
 
+    /**
+     * Autentica un usuario por su username y contraseña.
+     * @param username  Nombre de usuario
+     * @param contrasenia Contraseña
+     * @return Usuario autenticado o null si no coincide
+     */
     @Override
     public Usuario autenticar(String username, String contrasenia) {
         List<Usuario> usuarios = cargarUsuarios();
@@ -54,6 +78,10 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         return usuario.orElse(null);
     }
 
+    /**
+     * Crea un nuevo usuario y lo guarda en el archivo.
+     * @param usuario Usuario a crear
+     */
     @Override
     public void crear(Usuario usuario) {
         List<Usuario> usuarios = cargarUsuarios();
@@ -61,6 +89,11 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         guardarUsuarios(usuarios);
     }
 
+    /**
+     * Busca un usuario por su nombre de usuario.
+     * @param username Nombre de usuario
+     * @return Usuario encontrado o null si no existe
+     */
     @Override
     public Usuario buscarPorUsername(String username) {
         List<Usuario> usuarios = cargarUsuarios();
@@ -70,6 +103,10 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         return usuario.orElse(null);
     }
 
+    /**
+     * Elimina un usuario del archivo por su username.
+     * @param username Nombre de usuario a eliminar
+     */
     @Override
     public void eliminar(String username) {
         List<Usuario> usuarios = cargarUsuarios();
@@ -77,6 +114,10 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         guardarUsuarios(usuarios);
     }
 
+    /**
+     * Actualiza los datos de un usuario existente.
+     * @param usuario Usuario con datos actualizados
+     */
     @Override
     public void actualizar(Usuario usuario) {
         List<Usuario> usuarios = cargarUsuarios();
@@ -94,11 +135,20 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         guardarUsuarios(usuarios);
     }
 
+    /**
+     * Lista todos los usuarios almacenados.
+     * @return Lista de todos los usuarios
+     */
     @Override
     public List<Usuario> listarTodos() {
         return cargarUsuarios();
     }
 
+    /**
+     * Lista los usuarios que pertenecen a un rol específico.
+     * @param rol Rol a filtrar
+     * @return Lista de usuarios con el rol dado
+     */
     @Override
     public List<Usuario> listarPorRol(Rol rol) {
         List<Usuario> usuarios = cargarUsuarios();
