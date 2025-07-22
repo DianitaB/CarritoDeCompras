@@ -38,13 +38,15 @@ public class RegistrarseView extends JFrame {
     private JButton btnGuardarRespuestas;
     private JLabel lblConfContra;
     private JLabel lblRegistarse;
+    private JTextField txtCedula;
+    private JLabel lblCedula;
     private MensajeInternacionalizacionHandler mensajeI;
 
 
     public RegistrarseView(MensajeInternacionalizacionHandler mensajeI) {
         setContentPane(panelPrincipal);
         setTitle("Registrarse");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(700, 700);
         setLocationRelativeTo(null);
         this.mensajeI = mensajeI;
@@ -56,193 +58,102 @@ public class RegistrarseView extends JFrame {
         return txtNombresCom;
     }
 
-    public void setTxtNombresCom(JTextField txtNombresCom) {
-        this.txtNombresCom = txtNombresCom;
-    }
-
-    public JLabel getLblNombres() {
-        return lblNombres;
-    }
-
-    public void setLblNombres(JLabel lblNombres) {
-        this.lblNombres = lblNombres;
-    }
-
     public JTextField getTxtFNacimiento() {
         return txtFNacimiento;
-    }
-
-    public void setTxtFNacimiento(JTextField txtFNacimiento) {
-        this.txtFNacimiento = txtFNacimiento;
-    }
-
-    public JLabel getLblFechaNa() {
-        return lblFechaNa;
-    }
-
-    public void setLblFechaNa(JLabel lblFechaNa) {
-        this.lblFechaNa = lblFechaNa;
     }
 
     public JTextField getTxtCorreo() {
         return txtCorreo;
     }
 
-    public void setTxtCorreo(JTextField txtCorreo) {
-        this.txtCorreo = txtCorreo;
-    }
-
-    public JLabel getLblCorreo() {
-        return lblCorreo;
-    }
-
-    public void setLblCorreo(JLabel lblCorreo) {
-        this.lblCorreo = lblCorreo;
-    }
-
-    public JLabel getLblTelefono() {
-        return lblTelefono;
-    }
-
-    public void setLblTelefono(JLabel lblTelefono) {
-        this.lblTelefono = lblTelefono;
-    }
-
     public JTextField getTxtTelefono() {
         return txtTelefono;
-    }
-
-    public void setTxtTelefono(JTextField txtTelefono) {
-        this.txtTelefono = txtTelefono;
-    }
-
-    public JLabel getLblPreguntas() {
-        return lblPreguntas;
-    }
-
-    public void setLblPreguntas(JLabel lblPreguntas) {
-        this.lblPreguntas = lblPreguntas;
     }
 
     public JTextField getTxtResp1() {
         return txtResp1;
     }
 
-    public void setTxtResp1(JTextField txtResp1) {
-        this.txtResp1 = txtResp1;
-    }
-
     public JComboBox getCbxP1() {
         return cbxP1;
-    }
-
-    public void setCbxP1(JComboBox cbxP1) {
-        this.cbxP1 = cbxP1;
-    }
-
-    public JLabel getLblResp1() {
-        return lblResp1;
-    }
-
-    public void setLblResp1(JLabel lblResp1) {
-        this.lblResp1 = lblResp1;
-    }
-
-    public JLabel getLblPre1() {
-        return lblPre1;
-    }
-
-    public void setLblPre1(JLabel lblPre1) {
-        this.lblPre1 = lblPre1;
     }
 
     public JComboBox getCbxPre3() {
         return cbxPre3;
     }
 
-    public void setCbxPre3(JComboBox cbxPre3) {
-        this.cbxPre3 = cbxPre3;
-    }
-
     public JComboBox getCbxP2() {
         return cbxP2;
-    }
-
-    public void setCbxP2(JComboBox cbxP2) {
-        this.cbxP2 = cbxP2;
     }
 
     public JTextField getTxtResp2() {
         return txtResp2;
     }
 
-    public void setTxtResp2(JTextField txtResp2) {
-        this.txtResp2 = txtResp2;
-    }
-
     public JTextField getTxtResp3() {
         return txtResp3;
     }
-
-    public void setTxtResp3(JTextField txtResp3) {
-        this.txtResp3 = txtResp3;
+    public String getUsuario() {
+        return txtUsuario.getText().trim();
     }
 
-    public JLabel getLblPre2() {
-        return lblPre2;
+    public String getCedula() {
+        return txtCedula.getText().trim();
     }
 
-    public void setLblPre2(JLabel lblPre2) {
-        this.lblPre2 = lblPre2;
+    public String getContrasenia() {
+        return new String(txtContrasenia.getPassword()).trim();
     }
 
-    public JLabel getLblResp2() {
-        return lblResp2;
+    public String getConfirmarContrasenia() {
+        return new String(txtConfirmarContrasenia.getPassword()).trim();
     }
 
-    public void setLblResp2(JLabel lblResp2) {
-        this.lblResp2 = lblResp2;
+    public String getNombreCompleto() {
+        return txtNombresCom.getText().trim();
     }
 
-    public JLabel getLblPre3() {
-        return lblPre3;
+    public String getFechaNacimiento() {
+        return txtFNacimiento.getText().trim();
     }
 
-    public void setLblPre3(JLabel lblPre3) {
-        this.lblPre3 = lblPre3;
+
+    public String getCorreo() {
+        return txtCorreo.getText().trim();
     }
 
-    public JLabel getLblResp3() {
-        return lblResp3;
+    public String getTelefono() {
+        return txtTelefono.getText().trim();
     }
 
-    public void setLblResp3(JLabel lblResp3) {
-        this.lblResp3 = lblResp3;
+    public String getPregunta1() {
+        return (String) cbxP1.getSelectedItem();
     }
 
-    public JLabel getLblUsuario() {
-        return lblUsuario;
+    public String getPregunta2() {
+        return (String) cbxP2.getSelectedItem();
     }
 
-    public void setLblUsuario(JLabel lblUsuario) {
-        this.lblUsuario = lblUsuario;
+    public String getPregunta3() {
+        return (String) cbxPre3.getSelectedItem();
     }
 
-    public JLabel getLblContrasenia() {
-        return lblContrasenia;
+    public String getRespuesta1() {
+        return txtResp1.getText().trim();
     }
 
-    public void setLblContrasenia(JLabel lblContrasenia) {
-        this.lblContrasenia = lblContrasenia;
+    public String getRespuesta2() {
+        return txtResp2.getText().trim();
     }
 
-    public JPanel getLblConfContrasenia() {
-        return panelConf;
+    public String getRespuesta3() {
+        return txtResp3.getText().trim();
     }
 
-    public void setLblConfContrasenia(JPanel lblConfContrasenia) {
-        this.panelConf = lblConfContrasenia;
-    }
+
+
+
+
 
     public MensajeInternacionalizacionHandler getMensajeI() {
         return mensajeI;
@@ -278,6 +189,54 @@ public class RegistrarseView extends JFrame {
 
     public JPasswordField getTxtConfirmarContrasenia() {
         return txtConfirmarContrasenia;
+    }
+
+    public JPanel getPanelConf() {
+        return panelConf;
+    }
+
+    public void setPanelConf(JPanel panelConf) {
+        this.panelConf = panelConf;
+    }
+
+    public JLabel getLblCedula() {
+        return lblCedula;
+    }
+
+    public void setLblCedula(JLabel lblCedula) {
+        this.lblCedula = lblCedula;
+    }
+
+    public JTextField getTxtCedula() {
+        return txtCedula;
+    }
+
+    public void setTxtCedula(JTextField txtCedula) {
+        this.txtCedula = txtCedula;
+    }
+
+    public JLabel getLblRegistarse() {
+        return lblRegistarse;
+    }
+
+    public void setLblRegistarse(JLabel lblRegistarse) {
+        this.lblRegistarse = lblRegistarse;
+    }
+
+    public JLabel getLblConfContra() {
+        return lblConfContra;
+    }
+
+    public void setLblConfContra(JLabel lblConfContra) {
+        this.lblConfContra = lblConfContra;
+    }
+
+    public JButton getBtnGuardarRespuestas() {
+        return btnGuardarRespuestas;
+    }
+
+    public void setBtnGuardarRespuestas(JButton btnGuardarRespuestas) {
+        this.btnGuardarRespuestas = btnGuardarRespuestas;
     }
 
     public void setTxtConfirmarContrasenia(JPasswordField txtConfirmarContrasenia) {

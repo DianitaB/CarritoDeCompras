@@ -7,10 +7,7 @@ import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.dao.RecuperacionDAO;
 import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.dao.UsuarioDAO;
-import ec.edu.ups.dao.impl.CarritoDAOMemoria;
-import ec.edu.ups.dao.impl.ProductoDAOMemoria;
-import ec.edu.ups.dao.impl.RecuperacionDAOMemoria;
-import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
+import ec.edu.ups.dao.impl.*;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.carrito.*;
@@ -25,6 +22,7 @@ import ec.edu.ups.vista.usuario.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Main {
     @SuppressWarnings("all")
@@ -35,32 +33,71 @@ public class Main {
         ProductoDAO productoDAO = new ProductoDAOMemoria();
         CarritoDAO carritoDAO = new CarritoDAOMemoria();
         RecuperacionDAO preguntasDAO = new RecuperacionDAOMemoria();
-        MensajeInternacionalizacionHandler mensajeI =
-                new MensajeInternacionalizacionHandler("es","EC");
+
+        MensajeInternacionalizacionHandler mensajeI = new MensajeInternacionalizacionHandler("es", "EC");
 
         LoginView loginView = new LoginView(mensajeI);
+        loginView.setVisible(true);
         RegistrarseView registrarseView = new RegistrarseView(mensajeI);
         CuestionarioView cuestionarioView = new CuestionarioView(mensajeI);
         CuestionarioRecuView cuestionarioRecuView = new CuestionarioRecuView(mensajeI);
-        UsuarioController usuarioController = new UsuarioController(usuarioDAO,
-                loginView,
-                registrarseView,
-                mensajeI);
 
+        UsuarioController usuarioController = new UsuarioController(usuarioDAO, loginView, registrarseView, mensajeI);
         usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, preguntasDAO, mensajeI, usuarioController);
 
-        loginView.setVisible(true);
-
-        // En lugar de usar windowClosed, agregamos listener al botón de login para detectar autenticación
         loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String tipo = loginView.getTipoAlmacenamiento();
+                String ruta = loginView.getRutaArchivos();
+
+                File carpeta = new File(ruta);
+                if (!carpeta.exists()) {
+                    carpeta.mkdirs();
+                }
+                UsuarioDAO usuarioDAO_local;
+                ProductoDAO productoDAO_local;
+                CarritoDAO carritoDAO_local;
+                RecuperacionDAO recuperacionDAO_local;
+
+                switch (tipo) {
+                    case "Memoria":
+                        usuarioDAO_local = new UsuarioDAOMemoria();
+                        productoDAO_local = new ProductoDAOMemoria();
+                        carritoDAO_local = new CarritoDAOMemoria();
+                        recuperacionDAO_local = new RecuperacionDAOMemoria();
+                        break;
+                    case "Archivo de texto":
+                        usuarioDAO_local = new UsuarioDAOTexto(new File(ruta, "usuarios.txt").getAbsolutePath());
+                        productoDAO_local = new ProductoDAOTexto(new File(ruta, "productos.txt").getAbsolutePath());
+                        carritoDAO_local = new CarritoDAOTexto(ruta, usuarioDAO_local, productoDAO_local);
+                        recuperacionDAO_local = new RecuperacionDAOTexto(new File(ruta, "recuperacion.txt").getAbsolutePath());
+                        break;
+                    case "Archivo Binario":
+                        usuarioDAO_local = new UsuarioDAOBinario(ruta);
+                        productoDAO_local = new ProductoDAOBinario(ruta);
+                        carritoDAO_local = new CarritoDAOBinario(ruta, usuarioDAO_local, productoDAO_local);
+                        recuperacionDAO_local = new RecuperacionDAOBinario(ruta);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(loginView, "Tipo de almacenamiento inválido");
+                        return;
+                }
+
+                UsuarioController usuarioController = new UsuarioController(usuarioDAO_local, loginView, registrarseView, mensajeI);
+
+                usuarioController.setPreguntasDependencias(cuestionarioView, cuestionarioRecuView, recuperacionDAO_local, mensajeI, usuarioController);
+
                 usuarioController.autenticar();
+
                 Usuario usuarioAutenticado = usuarioController.getUsuarioAutenticado();
+
                 if (usuarioAutenticado != null) {
-                    // Usuario autenticado, construimos ventana principal y demás vistas solo una vez
+                    loginView.dispose();
+
                     MenuPrincipalView principalView = new MenuPrincipalView(mensajeI);
 
+                    // Crear vistas
                     ProductoAnadirView productoAnadirView = new ProductoAnadirView(mensajeI);
                     ProductoListaView productoListaView = new ProductoListaView(mensajeI);
                     ProductoModificarView productoModificarView = new ProductoModificarView(mensajeI);
@@ -76,19 +113,20 @@ public class Main {
                     UsuarioEliminarView usuarioEliminarView = new UsuarioEliminarView(mensajeI);
                     UsuarioModificarView usuarioModificarView = new UsuarioModificarView(mensajeI);
 
+                    // Crear controladores con DAOs actualizados
                     ProductoController productoController = new ProductoController(
                             productoAnadirView,
                             productoListaView,
                             productoModificarView,
                             productoEliminarView,
                             carritoAnadirView,
-                            productoDAO,
+                            productoDAO_local,
                             mensajeI
                     );
 
                     CarritoController carritoController = new CarritoController(
-                            carritoDAO,
-                            productoDAO,
+                            carritoDAO_local,
+                            productoDAO_local,
                             carritoAnadirView,
                             carritoListarView,
                             carritoEliminarView,
@@ -98,18 +136,23 @@ public class Main {
                             usuarioAutenticado
                     );
 
+                    // Configurar controlador usuario con vistas y controlador principal
                     usuarioController.setMenuPrincipalView(principalView);
                     usuarioController.setUsuarioListarView(usuarioListarView);
                     usuarioController.setUsuarioEliminarView(usuarioEliminarView);
                     usuarioController.setUsuarioModificarView(usuarioModificarView);
                     usuarioController.setMensajeInternacionalizacionHandler(mensajeI);
 
+                    productoController.setProductoAnadirView(productoAnadirView);
+                    productoController.setProductoListaView(productoListaView);
+                    productoController.setProductoModificarView(productoModificarView);
+                    productoController.setProductoEliminarView(productoEliminarView);
+
                     principalView.setVisible(true);
-                    loginView.dispose();
                     principalView.mostrarUsuario(usuarioAutenticado.getUsername());
+
                     principalView.configurarOpcionesPorRolUsuario(usuarioAutenticado.getRol().name());
 
-                    // Menús para mostrar vistas internas (desktop pane)
                     principalView.getMenuItemModificarUsuario().addActionListener(ev -> {
                         if (!usuarioModificarView.isVisible()) {
                             principalView.getjDesktopPane().add(usuarioModificarView);
@@ -180,6 +223,7 @@ public class Main {
                         }
                     });
 
+                    // Cambiar idiomas
                     ActionListener idiomaEs = ev -> {
                         principalView.cambiarIdioma("es", "EC");
                         productoAnadirView.cambiarIdioma();
@@ -240,6 +284,9 @@ public class Main {
 
                     principalView.getMenuItemEliminarUsuario().addActionListener(ev -> usuarioController.eliminarUsuario());
                     principalView.getMenuItemBuscarUsuario().addActionListener(ev -> usuarioController.buscarUsuario());
+
+                } else {
+                    JOptionPane.showMessageDialog(loginView, "Usuario o contraseña incorrectos");
                 }
             }
         });

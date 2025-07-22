@@ -1,7 +1,12 @@
 package ec.edu.ups.controlador;
 
+import ec.edu.ups.dao.CarritoDAO;
+import ec.edu.ups.dao.ProductoDAO;
 import ec.edu.ups.dao.RecuperacionDAO;
 import ec.edu.ups.dao.UsuarioDAO;
+import ec.edu.ups.dao.impl.*;
+import ec.edu.ups.modelo.Exception.CedulaValidationException;
+import ec.edu.ups.modelo.Exception.UsuarioException;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
@@ -13,12 +18,15 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFileChooser;
+
 
 public class UsuarioController {
     private Usuario usuario;
-    private final UsuarioDAO usuarioDAO;
+    private UsuarioDAO usuarioDAO;
     private LoginView loginView;
     private RegistrarseView registrarseView;
     private MenuPrincipalView menuPrincipalView;
@@ -27,6 +35,7 @@ public class UsuarioController {
     private UsuarioModificarView usuarioModificarView;
     private MensajeInternacionalizacionHandler mensajeI;
     private CuestionarioView cuestionarioView;
+    private CuestionarioRecuView cuestionarioRecuView;
     private RecuperacionController preguntasController;
 
     public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView,
@@ -38,6 +47,9 @@ public class UsuarioController {
         this.mensajeI = mensajeI;
         this.registrarseView = registrarseView;
         configurarEventosEnVistas();
+    }
+    public UsuarioController() {
+        this.usuarioDAO = new UsuarioDAOBinario("ruta/a/tu/archivo/usuarios.bin");
     }
 
     public void setPreguntasDependencias(CuestionarioView cuestionarioView, CuestionarioRecuView cuestionarioRecuView, RecuperacionDAO preguntasDAO, MensajeInternacionalizacionHandler mensajeI, UsuarioController usuarioController) {
@@ -93,12 +105,13 @@ public class UsuarioController {
     }
 
     private void configurarEventosEnVistas(){
-        loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
+        loginView. getBtnBuscarRuta().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                autenticar();
+                ruta();
             }
         });
+
         loginView.getBtnRegistrarse().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -110,6 +123,12 @@ public class UsuarioController {
     }
 
     private void configuracionEventosEnRegistrarse() {
+        registrarseView.getBtnGuardarRespuestas().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guardarRespuestas();
+            }
+        });
         registrarseView.getBtnRegistrarse2().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,6 +146,7 @@ public class UsuarioController {
                 }
             }
         });
+
     }
 
     private void configurarEventosListarUsuario() {
@@ -177,6 +197,30 @@ public class UsuarioController {
         }
     }
 
+    private void ruta() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Selecciona la carpeta de almacenamiento");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int seleccion = chooser.showOpenDialog(null);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File carpetaSeleccionada = chooser.getSelectedFile();
+
+            if (carpetaSeleccionada != null && carpetaSeleccionada.exists() && carpetaSeleccionada.isDirectory()) {
+                loginView.getTxtCampoDeRuta().setText(carpetaSeleccionada.getAbsolutePath());
+            } else {
+                JOptionPane.showMessageDialog(null, "La carpeta seleccionada no existe o no es válida.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una carpeta para continuar.");
+        }
+    }
+
+
+
+
+
     private void modificarUsuario() {
         String username = usuarioModificarView.getTxtUsuarioModis().getText().trim();
         String contrasenia = usuarioModificarView.getTxtContraseniaModi().getText().trim();
@@ -192,11 +236,17 @@ public class UsuarioController {
             JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.usuario.no.encontrado"));
             return;
         }
-        usuarioExistente.setRol((Rol) rolSeleccionado);
-        usuarioExistente.setContrasenia(contrasenia);
-        usuarioDAO.actualizar(usuarioExistente);
-        JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.usuario.modificado"));
+
+        try {
+            usuarioExistente.setContrasenia(contrasenia);
+            usuarioExistente.setRol((Rol) rolSeleccionado);
+            usuarioDAO.actualizar(usuarioExistente);
+            JOptionPane.showMessageDialog(usuarioModificarView, mensajeI.get("mensaje.usuario.modificado"));
+        } catch (UsuarioException ex) {
+            JOptionPane.showMessageDialog(usuarioModificarView, "Error: " + ex.getMessage(), "Validación", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
 
     public void autenticar(){
         String username = loginView.getTxtUsername().getText();
@@ -211,24 +261,24 @@ public class UsuarioController {
         }
     }
 
-    private void crear(){
-        String usuarioT = registrarseView.getTxtUsuario().getText();
-        String contrasenia = new String(registrarseView.getTxtContrasenia().getPassword());
-        String confirmarContrasenia = new String(registrarseView.getTxtConfirmarContrasenia().getPassword());
-        String nombre = registrarseView.getTxtNombresCom().getText();
-        String fechaNac = registrarseView.getTxtFNacimiento().getText();
-        String correo = registrarseView.getTxtCorreo().getText();
-        String telefono = registrarseView.getTxtTelefono().getText();
-        String pregunta1 = (String) registrarseView.getCbxP1().getSelectedItem();
-        String pregunta2 = (String) registrarseView.getCbxP2().getSelectedItem();
-        String pregunta3 = (String) registrarseView.getCbxPre3().getSelectedItem();
+    private void crear() {
+        String usuarioT = registrarseView.getUsuario();
+        String cedula = registrarseView.getCedula();
+        String contrasenia = registrarseView.getContrasenia();
+        String confirmarContrasenia = registrarseView.getConfirmarContrasenia();
+        String nombre = registrarseView.getNombreCompleto();
+        String fechaNac = registrarseView.getFechaNacimiento();
+        String correo = registrarseView.getCorreo();
+        String telefono = registrarseView.getTelefono();
+        String pregunta1 = registrarseView.getPregunta1();
+        String pregunta2 = registrarseView.getPregunta2();
+        String pregunta3 = registrarseView.getPregunta3();
+        String respuesta1 = registrarseView.getRespuesta1();
+        String respuesta2 = registrarseView.getRespuesta2();
+        String respuesta3 = registrarseView.getRespuesta3();
 
-        String respuesta1 = registrarseView.getTxtResp1().getText();
-        String respuesta2 = registrarseView.getTxtResp2().getText();
-        String respuesta3 = registrarseView.getTxtResp3().getText();
-
-        if (usuarioT.isEmpty() || contrasenia.isEmpty() || confirmarContrasenia.isEmpty() || nombre.isEmpty()
-                || fechaNac.isEmpty() || correo.isEmpty() || telefono.isEmpty()
+        if (usuarioT.isEmpty() || cedula.isEmpty() || contrasenia.isEmpty() || confirmarContrasenia.isEmpty()
+                || nombre.isEmpty() || fechaNac.isEmpty() || correo.isEmpty() || telefono.isEmpty()
                 || respuesta1.isEmpty() || respuesta2.isEmpty() || respuesta3.isEmpty()) {
             registrarseView.mostrarMensaje(mensajeI.get("mensaje.campos.obligatorios"));
             return;
@@ -250,20 +300,32 @@ public class UsuarioController {
             return;
         }
 
-        List<String> preguntas = new ArrayList<>();
-        preguntas.add(pregunta1);
-        preguntas.add(pregunta2);
-        preguntas.add(pregunta3);
+        try {
+            Usuario.validarCedula(cedula);
 
-        List<String> respuestas = new ArrayList<>();
-        respuestas.add(respuesta1);
-        respuestas.add(respuesta2);
-        respuestas.add(respuesta3);
+            List<String> preguntas = new ArrayList<>();
+            preguntas.add(pregunta1);
+            preguntas.add(pregunta2);
+            preguntas.add(pregunta3);
 
-        Usuario nuevoUsuario = new Usuario(usuarioT, contrasenia, nombre, fechaNac, correo, telefono, preguntas, respuestas);
-        usuarioDAO.crear(nuevoUsuario);
-        registrarseView.mostrarMensaje(mensajeI.get("mensaje.usuario.registrado"));
-        registrarseView.dispose();
+            List<String> respuestas = new ArrayList<>();
+            respuestas.add(respuesta1);
+            respuestas.add(respuesta2);
+            respuestas.add(respuesta3);
+
+            Usuario nuevoUsuario = new Usuario(usuarioT, contrasenia, Rol.USUARIO, nombre, fechaNac, correo, telefono);
+            nuevoUsuario.setUsername(cedula);
+            nuevoUsuario.setPreguntas(preguntas);
+            nuevoUsuario.setRespuestas(respuestas);
+
+            nuevoUsuario.setContrasenia(contrasenia);
+
+            usuarioDAO.crear(nuevoUsuario);
+            registrarseView.mostrarMensaje(mensajeI.get("mensaje.usuario.registrado"));
+            registrarseView.dispose();
+        } catch (CedulaValidationException | UsuarioException e) {
+            registrarseView.mostrarMensaje("Error: " + e.getMessage());
+        }
     }
 
     private void buscarUsuarios() {
@@ -348,13 +410,29 @@ public class UsuarioController {
         this.mensajeI = mensajeI;
     }
 
-    public void mostrarVentanaInterna(JInternalFrame frame) {
-        if (menuPrincipalView != null) {
-            menuPrincipalView.getjDesktopPane().add(frame);
-            frame.setVisible(true);
-            frame.toFront();
+    private void guardarRespuestas() {
+        String pregunta1 = (String) registrarseView.getCbxP1().getSelectedItem();
+        String pregunta2 = (String) registrarseView.getCbxP2().getSelectedItem();
+        String pregunta3 = (String) registrarseView.getCbxPre3().getSelectedItem();
+
+        String respuesta1 = registrarseView.getTxtResp1().getText().trim();
+        String respuesta2 = registrarseView.getTxtResp2().getText().trim();
+        String respuesta3 = registrarseView.getTxtResp3().getText().trim();
+
+        if (respuesta1.isEmpty() || respuesta2.isEmpty() || respuesta3.isEmpty()) {
+            JOptionPane.showMessageDialog(registrarseView, "Por favor, complete todas las respuestas.");
+            return;
         }
+
+        if (pregunta1.equals(pregunta2) || pregunta1.equals(pregunta3) || pregunta2.equals(pregunta3)) {
+            JOptionPane.showMessageDialog(registrarseView, "Las preguntas de seguridad deben ser diferentes.");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(registrarseView, "Respuestas guardadas correctamente.");
+        registrarseView.getBtnRegistrarse2().setEnabled(true);
     }
+
 
     public Usuario getUsuarioAutenticado(){
         return usuario;
